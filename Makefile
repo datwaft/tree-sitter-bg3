@@ -1,4 +1,5 @@
 TREE_SITTER ?= tree-sitter
+PLENARY_PATH ?= $(HOME)/.local/share/nvim/lazy/plenary.nvim
 OUTER := tree-sitter-bg3-stats
 VALUE := tree-sitter-bg3-stats-value
 BUILD := build
@@ -21,7 +22,8 @@ test-grammar: generate
 	$(TREE_SITTER) test -p $(VALUE)
 
 test-neovim: build
-	nvim --clean --headless -u test/neovim.lua
+	test -d $(PLENARY_PATH)
+	BG3_TEST_ROOT=$(CURDIR) PLENARY_PATH=$(PLENARY_PATH) nvim --headless -u test/minimal_init.lua -c "PlenaryBustedDirectory test/integration { minimal_init = 'test/minimal_init.lua', sequential = true }"
 
 test: test-grammar test-neovim
 

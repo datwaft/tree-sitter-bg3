@@ -100,8 +100,14 @@ make generate
 make test
 ```
 
-`make test` runs both corpus suites and a headless Neovim test covering file
-detection, highlighting queries, outer parsing, and value-language injection.
+`make test` runs both corpus suites and a Plenary integration suite covering
+file detection, buffer options, highlighting and indentation queries, outer
+parsing, and value-language injection. It looks for Plenary in Lazy's default
+data directory; override `PLENARY_PATH` when it is installed elsewhere:
+
+```sh
+make test PLENARY_PATH=/path/to/plenary.nvim
+```
 
 Authored grammar files are `grammar.js`, query files, corpus fixtures, and the
 outer grammar's `scanner.c`. Tree-sitter CLI output under each `src/` directory
