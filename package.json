@@ -12,8 +12,6 @@
   "files": [
     "ftdetect/**",
     "ftplugin/**",
-    "lua/**",
-    "plugin/**",
     "tree-sitter.json",
     "tree-sitter-*/grammar.js",
     "tree-sitter-*/queries/**",

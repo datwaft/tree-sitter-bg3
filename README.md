@@ -29,15 +29,14 @@ tree-sitter-bg3-stats-value/
   test/corpus/
 ftdetect/
 ftplugin/
-lua/
-plugin/
 ```
 
 `tree-sitter.json` is the single repository manifest for both grammars. Query
 files live with the grammar that owns them. The Neovim runtime files provide
-conservative `.txt` detection, comments, automatic parser start, and
-`:BG3InspectTree`. Indentation comes from the outer grammar's `indents.scm`
-query and the editor's Tree-sitter indent evaluator.
+path-based `.txt` detection and buffer-local comment settings. Arborist,
+`nvim-treesitter`, or another editor integration owns parser installation,
+startup, highlighting, and indentation. Indentation comes from the outer
+grammar's `indents.scm` query and the editor's Tree-sitter indent evaluator.
 
 ## Neovim with Arborist
 
