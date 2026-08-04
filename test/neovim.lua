@@ -10,13 +10,13 @@ vim.cmd("edit " .. vim.fn.fnameescape(root .. "/examples/Public/Example/Stats/Ge
 
 assert(vim.bo.filetype == "bg3_stats", "expected bg3_stats filetype, got " .. vim.bo.filetype)
 assert(vim.bo.commentstring == "// %s", "expected BG3 commentstring")
-assert(vim.bo.indentexpr:find("require'bg3'", 1, true), "expected BG3 indent expression")
 
 local parser = vim.treesitter.get_parser(0, "bg3_stats")
 local trees = parser:parse(true)
 assert(#trees == 1, "expected one outer BG3 syntax tree")
 assert(not trees[1]:root():has_error(), "outer BG3 syntax tree contains errors")
 assert(vim.treesitter.query.get("bg3_stats", "highlights"), "missing outer highlight query")
+assert(vim.treesitter.query.get("bg3_stats", "indents"), "missing outer indent query")
 assert(vim.treesitter.query.get("bg3_stats_value", "highlights"), "missing value highlight query")
 
 local injected = false
