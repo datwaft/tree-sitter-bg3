@@ -1,0 +1,57 @@
+==================
+Stats entries
+==================
+
+// A passive with nested value expressions
+new entry "SneakAttack_Improved"
+type "PassiveData"
+using "SneakAttack"
+data "DisplayName" "h123456789012345678901234567890123456"
+data "Conditions" "IsSpell() and not Self()"
+data "StatsFunctors" "IF(HasDamageDoneForType(DamageType.Lightning)):ApplyStatus(SHOCKED,100,2)" // inline
+
+new entry "Empty_Value"
+type "SpellData"
+data "DescriptionParams" ""
+
+---
+
+(source_file
+  (comment)
+  (stat_entry
+    (entry_header
+      (quoted_string
+        (string_content)))
+    (type_clause
+      (quoted_string
+        (string_content)))
+    (using_clause
+      (quoted_string
+        (string_content)))
+    (data_clause
+      (quoted_string
+        (string_content))
+      (quoted_string
+        (string_content)))
+    (data_clause
+      (quoted_string
+        (string_content))
+      (quoted_string
+        (string_content)))
+    (data_clause
+      (quoted_string
+        (string_content))
+      (quoted_string
+        (string_content))
+      (trailing_comment)))
+  (stat_entry
+    (entry_header
+      (quoted_string
+        (string_content)))
+    (type_clause
+      (quoted_string
+        (string_content)))
+    (data_clause
+      (quoted_string
+        (string_content))
+      (quoted_string))))

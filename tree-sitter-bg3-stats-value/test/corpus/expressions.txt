@@ -1,0 +1,133 @@
+==================
+Function calls and conditions
+==================
+
+IF(HasDamageDoneForType(DamageType.Lightning)):ApplyStatus(SHOCKED,100,2);not Self() and IsSpell()
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (if_expression
+        (expression
+          (call_expression
+            (identifier)
+            (argument_list
+              (expression
+                (member_expression
+                  (identifier)
+                  (identifier))))))
+        (expression
+          (call_expression
+            (identifier)
+            (argument_list
+              (expression
+                (identifier))
+              (expression
+                (number))
+              (expression
+                (number)))))))
+    (expression
+      (binary_expression
+        (expression
+          (unary_expression
+            (expression
+              (call_expression
+                (identifier)
+                (argument_list)))))
+        (expression
+          (call_expression
+            (identifier)
+            (argument_list)))))))
+
+==================
+Collections and member access
+==================
+
+CL_ApplyStatusBulk({'MAG_FROST','MAG_FROST_DURATION_TECHNICAL'},{context.Target},{100},{2,1})
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (expression
+            (list_literal
+              (expression
+                (string_literal
+                  (string_content)))
+              (expression
+                (string_literal
+                  (string_content)))))
+          (expression
+            (list_literal
+              (expression
+                (member_expression
+                  (identifier)
+                  (identifier)))))
+          (expression
+            (list_literal
+              (expression
+                (number))))
+          (expression
+            (list_literal
+              (expression
+                (number))
+              (expression
+                (number)))))))))
+
+==================
+Resources and identifier lists
+==================
+
+ActionPoint:1;SpellSlot:1:1:2;Target_MistyStep;MAG_FROST
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (resource_expression
+        (identifier)
+        (number)))
+    (expression
+      (resource_expression
+        (identifier)
+        (number)
+        (number)
+        (number)))
+    (expression
+      (identifier))
+    (expression
+      (identifier))))
+
+==================
+Literals
+==================
+
+h123456789012345678901234567890123456;0ce43a83-b0d8-4666-be03-7cd804421dc6;1d6+3;True;-1
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (localization_handle))
+    (expression
+      (uuid))
+    (expression
+      (binary_expression
+        (expression
+          (dice_literal))
+        (expression
+          (number))))
+    (expression
+      (boolean))
+    (expression
+      (unary_expression
+        (expression
+          (number))))))

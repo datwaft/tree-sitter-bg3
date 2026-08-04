@@ -1,0 +1,125 @@
+==================
+Treasure tables
+==================
+
+new treasuretable "TUT_Chest_Potions"
+CanMerge 1
+new subtable "1,1"
+object category "I_DeathSword_Bag",1,0,0,0,0,0,0,0
+
+new treasuretable "Second_Table"
+new subtable "0,1"
+object category "Gold",1,0,0
+
+---
+
+(source_file
+  (treasure_table
+    (treasure_table_header
+      (quoted_string
+        (string_content)))
+    (merge_clause
+      (identifier)
+      (number))
+    (treasure_subtable
+      (subtable_header
+        (quoted_string
+          (string_content)))
+      (object_clause
+        (quoted_string
+          (string_content))
+        (comma_values
+          (number)
+          (number)
+          (number)
+          (number)
+          (number)
+          (number)
+          (number)
+          (number)))))
+  (treasure_table
+    (treasure_table_header
+      (quoted_string
+        (string_content)))
+    (treasure_subtable
+      (subtable_header
+        (quoted_string
+          (string_content)))
+      (object_clause
+        (quoted_string
+          (string_content))
+        (comma_values
+          (number)
+          (number)
+          (number))))))
+
+==================
+Equipment and named blocks
+==================
+
+new equipment "EQP_CC_Fighter"
+add initialweaponset "Melee"
+add equipmentgroup
+add equipment entry "WPN_Greatsword_1"
+
+new spellset "My_Spells"
+add spell "Target_MistyStep"
+
+---
+
+(source_file
+  (equipment_entry
+    (equipment_header
+      (quoted_string
+        (string_content)))
+    (add_clause
+      (identifier)
+      (arguments
+        (quoted_string
+          (string_content))))
+    (add_clause
+      (identifier))
+    (add_clause
+      (identifier)
+      (identifier)
+      (arguments
+        (quoted_string
+          (string_content)))))
+  (named_block
+    (named_block_header
+      (quoted_string
+        (string_content)))
+    (add_clause
+      (identifier)
+      (arguments
+        (quoted_string
+          (string_content))))))
+
+==================
+Structure fallback
+==================
+
+modifier type "Armor"
+value type "FixedString"
+enumeration "Rarity" Common,Uncommon,Rare
+
+---
+
+(source_file
+  (generic_statement
+    (identifier)
+    (identifier)
+    (quoted_string
+      (string_content)))
+  (generic_statement
+    (identifier)
+    (identifier)
+    (quoted_string
+      (string_content)))
+  (generic_statement
+    (identifier)
+    (quoted_string
+      (string_content))
+    (identifier)
+    (identifier)
+    (identifier)))

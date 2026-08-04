@@ -1,0 +1,8 @@
+// Demonstrates outer Stats syntax and the injected value-expression language.
+new entry "BG3_NVIM_EXAMPLE_PASSIVE"
+type "PassiveData"
+data "DisplayName" "h123456789012345678901234567890123456"
+data "Conditions" "IsSpell() and not Self()"
+data "StatsFunctorContext" "OnDamage"
+data "StatsFunctors" "IF(HasDamageDoneForType(DamageType.Lightning)):ApplyStatus(SHOCKED,100,2)"
+data "Boosts" "ActionResource(ActionPoint,1);UnlockSpell(Target_MistyStep)"

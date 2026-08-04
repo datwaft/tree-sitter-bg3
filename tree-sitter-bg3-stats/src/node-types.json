@@ -1,0 +1,729 @@
+[
+  {
+    "type": "add_clause",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "arguments",
+            "named": true
+          }
+        ]
+      },
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "qualifier": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "quoted_string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comma_values",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "quoted_string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "data_clause",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "entry_header",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "equipment_entry",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "add_clause",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "equipment_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "equipment_header",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "generic_statement",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      },
+      "command": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "merge_clause",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "named_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "add_clause",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "named_block_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "named_block_header",
+    "named": true,
+    "fields": {
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "itemgroup",
+            "named": false
+          },
+          {
+            "type": "namegroup",
+            "named": false
+          },
+          {
+            "type": "spellset",
+            "named": false
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "object_clause",
+    "named": true,
+    "fields": {
+      "category": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      },
+      "weights": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "comma_values",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "quoted_string",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_content",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "equipment_entry",
+          "named": true
+        },
+        {
+          "type": "generic_statement",
+          "named": true
+        },
+        {
+          "type": "named_block",
+          "named": true
+        },
+        {
+          "type": "stat_entry",
+          "named": true
+        },
+        {
+          "type": "treasure_table",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "stat_entry",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "data_clause",
+          "named": true
+        },
+        {
+          "type": "entry_header",
+          "named": true
+        },
+        {
+          "type": "type_clause",
+          "named": true
+        },
+        {
+          "type": "using_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "subtable_header",
+    "named": true,
+    "fields": {
+      "distribution": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "trailing_comment",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "treasure_subtable",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "object_clause",
+          "named": true
+        },
+        {
+          "type": "subtable_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "treasure_table",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "merge_clause",
+          "named": true
+        },
+        {
+          "type": "treasure_subtable",
+          "named": true
+        },
+        {
+          "type": "treasure_table_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "treasure_table_header",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_clause",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "using_clause",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "trailing_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": ":",
+    "named": false
+  },
+  {
+    "type": "add",
+    "named": false
+  },
+  {
+    "type": "category",
+    "named": false
+  },
+  {
+    "type": "data",
+    "named": false
+  },
+  {
+    "type": "entry",
+    "named": false
+  },
+  {
+    "type": "equipment",
+    "named": false
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "itemgroup",
+    "named": false
+  },
+  {
+    "type": "namegroup",
+    "named": false
+  },
+  {
+    "type": "new",
+    "named": false
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "object",
+    "named": false
+  },
+  {
+    "type": "spellset",
+    "named": false
+  },
+  {
+    "type": "string_content",
+    "named": true
+  },
+  {
+    "type": "subtable",
+    "named": false
+  },
+  {
+    "type": "treasuretable",
+    "named": false
+  },
+  {
+    "type": "type",
+    "named": false
+  },
+  {
+    "type": "using",
+    "named": false
+  }
+]
