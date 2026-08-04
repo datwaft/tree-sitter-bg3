@@ -96,9 +96,13 @@ For an unusual path:
 ## Development
 
 ```sh
+npm install
 make generate
 make test
 ```
+
+The npm dependency provides the Tree-sitter CLI and its JavaScript DSL types;
+the latter keep both grammar files checked by JavaScript language servers.
 
 `make test` runs both corpus suites and a Plenary integration suite covering
 file detection, buffer options, highlighting and indentation queries, outer

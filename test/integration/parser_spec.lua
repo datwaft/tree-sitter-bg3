@@ -17,9 +17,10 @@ describe("BG3 Stats parser integration", function()
 
   it("parses the outer Stats document", function()
     local trees = open_example():parse(true)
+    local tree = assert(trees[1], "expected an outer syntax tree")
 
     assert.equals(1, #trees)
-    assert.is_false(trees[1]:root():has_error())
+    assert.is_false(tree:root():has_error())
   end)
 
   it("loads the editor queries", function()

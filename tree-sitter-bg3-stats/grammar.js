@@ -1,6 +1,4 @@
-const commaSep1 = (rule) => seq(rule, repeat(seq(',', rule)));
-
-module.exports = grammar({
+export default grammar({
   name: 'bg3_stats',
 
   extras: () => [/[\t \f]/],
@@ -166,7 +164,10 @@ module.exports = grammar({
       $.number,
     ),
 
-    comma_values: ($) => commaSep1(choice($.number, $.identifier, $.quoted_string)),
+    comma_values: ($) => {
+      const value = choice($.number, $.identifier, $.quoted_string);
+      return seq(value, repeat(seq(',', value)));
+    },
 
     _argument: ($) => choice(
       $.quoted_string,

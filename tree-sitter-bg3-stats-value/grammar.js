@@ -10,9 +10,23 @@ const PREC = {
   CALL: 9,
 };
 
-const commaSep = (rule) => optional(seq(rule, repeat(seq(',', rule)), optional(',')));
+const BINARY_OPERATORS = {
+  or: PREC.OR,
+  and: PREC.AND,
+  '==': PREC.COMPARE,
+  '!=': PREC.COMPARE,
+  '>=': PREC.COMPARE,
+  '<=': PREC.COMPARE,
+  '>': PREC.COMPARE,
+  '<': PREC.COMPARE,
+  '+': PREC.ADD,
+  '-': PREC.ADD,
+  '*': PREC.MULTIPLY,
+  '/': PREC.MULTIPLY,
+  '%': PREC.MULTIPLY,
+};
 
-module.exports = grammar({
+export default grammar({
   name: 'bg3_stats_value',
 
   extras: () => [/\s/],
@@ -56,21 +70,7 @@ module.exports = grammar({
     )),
 
     binary_expression: ($) => choice(
-      ...[
-        ['or', PREC.OR],
-        ['and', PREC.AND],
-        ['==', PREC.COMPARE],
-        ['!=', PREC.COMPARE],
-        ['>=', PREC.COMPARE],
-        ['<=', PREC.COMPARE],
-        ['>', PREC.COMPARE],
-        ['<', PREC.COMPARE],
-        ['+', PREC.ADD],
-        ['-', PREC.ADD],
-        ['*', PREC.MULTIPLY],
-        ['/', PREC.MULTIPLY],
-        ['%', PREC.MULTIPLY],
-      ].map(([operator, precedence]) => prec.left(precedence, seq(
+      ...Object.entries(BINARY_OPERATORS).map(([operator, precedence]) => prec.left(precedence, seq(
         field('left', $.expression),
         field('operator', operator),
         field('right', $.expression),
@@ -87,7 +87,13 @@ module.exports = grammar({
       field('arguments', $.argument_list),
     )),
 
-    argument_list: ($) => seq('(', commaSep($.expression), ')'),
+    argument_list: ($) => seq('(', optional($._expression_list), ')'),
+
+    _expression_list: ($) => seq(
+      $.expression,
+      repeat(seq(',', $.expression)),
+      optional(','),
+    ),
 
     member_expression: ($) => prec.left(PREC.MEMBER, seq(
       field('object', choice($.identifier, $.member_expression)),
@@ -102,7 +108,7 @@ module.exports = grammar({
 
     parenthesized_expression: ($) => seq('(', $.expression, ')'),
 
-    list_literal: ($) => seq('{', commaSep($.expression), '}'),
+    list_literal: ($) => seq('{', optional($._expression_list), '}'),
 
     string_literal: ($) => seq(
       "'",

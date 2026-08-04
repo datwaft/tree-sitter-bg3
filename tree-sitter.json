@@ -6,7 +6,6 @@
       "camelcase": "Bg3Stats",
       "scope": "source.bg3-stats",
       "path": "tree-sitter-bg3-stats",
-      "file-types": null,
       "highlights": "tree-sitter-bg3-stats/queries/highlights.scm",
       "injections": "tree-sitter-bg3-stats/queries/injections.scm",
       "injection-regex": "^bg3_stats$"
@@ -16,7 +15,6 @@
       "camelcase": "Bg3StatsValue",
       "scope": "source.bg3-stats-value",
       "path": "tree-sitter-bg3-stats-value",
-      "file-types": null,
       "highlights": "tree-sitter-bg3-stats-value/queries/highlights.scm",
       "injection-regex": "^bg3_stats_value$"
     }
@@ -25,6 +23,9 @@
     "version": "0.1.0",
     "license": "MIT",
     "description": "Tree-sitter grammars for Baldur's Gate 3 Stats files",
+    "links": {
+      "repository": "https://github.com/datwaft/tree-sitter-bg3"
+    },
     "authors": [
       {
         "name": "datwaft"

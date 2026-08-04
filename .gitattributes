@@ -3,3 +3,4 @@ tree-sitter-*/src/grammar.json linguist-generated=true
 tree-sitter-*/src/node-types.json linguist-generated=true
 tree-sitter-*/src/parser.c linguist-generated=true
 tree-sitter-*/src/tree_sitter/** linguist-generated=true
+package-lock.json linguist-generated=true

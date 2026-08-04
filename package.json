@@ -1,7 +1,9 @@
 {
   "name": "tree-sitter-bg3",
   "version": "0.1.0",
+  "type": "module",
   "description": "Tree-sitter grammars for Baldur's Gate 3 Stats files",
+  "repository": "github:datwaft/tree-sitter-bg3",
   "license": "MIT",
   "keywords": [
     "incremental",
