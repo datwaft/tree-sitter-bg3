@@ -2,6 +2,9 @@
 
 use tree_sitter_language::LanguageFn;
 
+/// The grammar package version included in cache compatibility fingerprints.
+pub const GRAMMAR_VERSION: &str = env!("CARGO_PKG_VERSION");
+
 unsafe extern "C" {
     fn tree_sitter_bg3_stats() -> *const ();
     fn tree_sitter_bg3_stats_value() -> *const ();
