@@ -1,4 +1,5 @@
 /build/
 /nvim.log
 node_modules/
+target/
 .DS_Store
