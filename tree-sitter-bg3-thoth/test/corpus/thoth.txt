@@ -1,0 +1,128 @@
+==================
+Helper declarations and exceptions
+==================
+
+local __util = require 'larian.util'
+
+function Calculate(entity, fallback)
+  entity = entity or context.Source
+  local result = fallback or 10
+  if entity.IsValid then
+    try
+      result = CalculateSpellDC(entity)
+    catch error then
+      result = fallback
+    end
+  end
+  return result
+end
+
+function CanApply(entity)
+  return HasStatus('TEST', entity) & ~Dead(entity)
+end
+
+function SilentFallback(entity)
+  try
+    return CalculateSpellDC(entity)
+  catch error then
+  end
+  return 10
+end
+
+---
+
+(chunk
+  (variable_declaration
+    (assignment_statement
+      (variable_list
+        (identifier))
+      (expression_list
+        (function_call
+          (identifier)
+          (arguments
+            (string
+              (string_content)))))))
+  (function_declaration
+    (identifier)
+    (parameters
+      (identifier)
+      (identifier))
+    (block
+      (assignment_statement
+        (variable_list
+          (identifier))
+        (expression_list
+          (binary_expression
+            (identifier)
+            (dot_index_expression
+              (identifier)
+              (identifier)))))
+      (variable_declaration
+        (assignment_statement
+          (variable_list
+            (identifier))
+          (expression_list
+            (binary_expression
+              (identifier)
+              (number)))))
+      (if_statement
+        (dot_index_expression
+          (identifier)
+          (identifier))
+        (block
+          (try_statement
+            (block
+              (assignment_statement
+                (variable_list
+                  (identifier))
+                (expression_list
+                  (function_call
+                    (identifier)
+                    (arguments
+                      (identifier))))))
+            (identifier)
+            (block
+              (assignment_statement
+                (variable_list
+                  (identifier))
+                (expression_list
+                  (identifier)))))))
+      (return_statement
+        (expression_list
+          (identifier)))))
+  (function_declaration
+    (identifier)
+    (parameters
+      (identifier))
+    (block
+      (return_statement
+        (expression_list
+          (binary_expression
+            (function_call
+              (identifier)
+              (arguments
+                (string
+                  (string_content))
+                (identifier)))
+            (unary_expression
+              (function_call
+                (identifier)
+                (arguments
+                  (identifier)))))))))
+  (function_declaration
+    (identifier)
+    (parameters
+      (identifier))
+    (block
+      (try_statement
+        (block
+          (return_statement
+            (expression_list
+              (function_call
+                (identifier)
+                (arguments
+                  (identifier))))))
+        (identifier))
+      (return_statement
+        (expression_list
+          (number))))))

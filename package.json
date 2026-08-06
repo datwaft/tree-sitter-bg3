@@ -1,8 +1,8 @@
 {
   "name": "tree-sitter-bg3",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "Tree-sitter grammars for Baldur's Gate 3 Stats files",
+  "description": "Tree-sitter grammars for Baldur's Gate 3 data and Thoth files",
   "repository": "github:datwaft/tree-sitter-bg3",
   "license": "MIT",
   "keywords": [
