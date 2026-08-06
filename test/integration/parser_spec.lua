@@ -1,6 +1,7 @@
 local root = assert(vim.env.BG3_TEST_ROOT, "BG3_TEST_ROOT is required")
 local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.txt"
 local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
+local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
 
 local function open_example()
   vim.cmd("edit " .. vim.fn.fnameescape(example))
@@ -31,6 +32,27 @@ describe("BG3 Stats parser integration", function()
     assert.is_not_nil(vim.treesitter.query.get("bg3_stats", "indents"))
     assert.is_not_nil(vim.treesitter.query.get("bg3_stats", "injections"))
     assert.is_not_nil(vim.treesitter.query.get("bg3_stats_value", "highlights"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "highlights"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "indents"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "folds"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "locals"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "tags"))
+  end)
+
+  it("parses Thoth helpers and exception handling", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(thoth_example))
+    local trees = vim.treesitter.get_parser(0, "bg3_thoth"):parse(true)
+    local tree = assert(trees[1], "expected a Thoth syntax tree")
+
+    assert.equals(1, #trees)
+    assert.is_false(tree:root():has_error())
+
+    local query = vim.treesitter.query.parse("bg3_thoth", "(try_statement) @exception")
+    local exceptions = 0
+    for _, _ in query:iter_captures(tree:root(), 0) do
+      exceptions = exceptions + 1
+    end
+    assert.equals(1, exceptions)
   end)
 
   it("parses injected data values with the value grammar", function()

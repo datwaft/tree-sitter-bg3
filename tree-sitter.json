@@ -17,12 +17,23 @@
       "path": "tree-sitter-bg3-stats-value",
       "highlights": "tree-sitter-bg3-stats-value/queries/highlights.scm",
       "injection-regex": "^bg3_stats_value$"
+    },
+    {
+      "name": "bg3_thoth",
+      "camelcase": "Bg3Thoth",
+      "scope": "source.bg3-thoth",
+      "path": "tree-sitter-bg3-thoth",
+      "file-types": ["khn"],
+      "highlights": "tree-sitter-bg3-thoth/queries/highlights.scm",
+      "locals": "tree-sitter-bg3-thoth/queries/locals.scm",
+      "tags": "tree-sitter-bg3-thoth/queries/tags.scm",
+      "injection-regex": "^bg3_thoth$"
     }
   ],
   "metadata": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "license": "MIT",
-    "description": "Tree-sitter grammars for Baldur's Gate 3 Stats files",
+    "description": "Tree-sitter grammars for Baldur's Gate 3 data and Thoth files",
     "links": {
       "repository": "https://github.com/datwaft/tree-sitter-bg3"
     },

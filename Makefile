@@ -2,6 +2,7 @@ TREE_SITTER ?= tree-sitter
 PLENARY_PATH ?= $(HOME)/.local/share/nvim/lazy/plenary.nvim
 OUTER := tree-sitter-bg3-stats
 VALUE := tree-sitter-bg3-stats-value
+THOTH := tree-sitter-bg3-thoth
 BUILD := build
 
 .PHONY: generate build test test-grammar test-neovim clean
@@ -9,17 +10,21 @@ BUILD := build
 generate:
 	cd $(OUTER) && $(TREE_SITTER) generate
 	cd $(VALUE) && $(TREE_SITTER) generate
+	cd $(THOTH) && $(TREE_SITTER) generate
 
 build: generate
-	mkdir -p $(BUILD)/parser $(BUILD)/queries/bg3_stats $(BUILD)/queries/bg3_stats_value
+	mkdir -p $(BUILD)/parser $(BUILD)/queries/bg3_stats $(BUILD)/queries/bg3_stats_value $(BUILD)/queries/bg3_thoth
 	$(TREE_SITTER) build -o $(BUILD)/parser/bg3_stats.so $(OUTER)
 	$(TREE_SITTER) build -o $(BUILD)/parser/bg3_stats_value.so $(VALUE)
+	$(TREE_SITTER) build -o $(BUILD)/parser/bg3_thoth.so $(THOTH)
 	cp $(OUTER)/queries/*.scm $(BUILD)/queries/bg3_stats/
 	cp $(VALUE)/queries/*.scm $(BUILD)/queries/bg3_stats_value/
+	cp $(THOTH)/queries/*.scm $(BUILD)/queries/bg3_thoth/
 
 test-grammar: generate
 	$(TREE_SITTER) test -p $(OUTER)
 	$(TREE_SITTER) test -p $(VALUE)
+	$(TREE_SITTER) test -p $(THOTH)
 
 test-neovim: build
 	test -d $(PLENARY_PATH)

@@ -1,0 +1,21 @@
+local __util = require 'larian.util'
+
+-- Returns a fallback value when the engine calculation fails.
+function ExampleSpellDC(entity, fallback)
+  entity = entity or context.Source
+  local result = fallback or 10
+
+  if entity.IsValid then
+    try
+      result = CalculateSpellDC(entity)
+    catch error then
+      result = fallback
+    end
+  end
+
+  return result
+end
+
+function ExampleCanApply(entity)
+  return HasStatus('EXAMPLE_STATUS', entity) & ~Dead(entity)
+end

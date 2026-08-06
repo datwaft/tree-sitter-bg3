@@ -1,6 +1,7 @@
 local root = assert(vim.env.BG3_TEST_ROOT, "BG3_TEST_ROOT is required")
 local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.txt"
 local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
+local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
 
 local function delete_buffers()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
@@ -26,6 +27,15 @@ describe("BG3 Stats filetype", function()
     assert.equals("bg3_lsx", vim.bo.filetype)
     assert.equals("<!-- %s -->", vim.bo.commentstring)
     assert.equals("xml", vim.treesitter.language.get_lang("bg3_lsx"))
+  end)
+
+  it("detects Thoth helper files and applies buffer options", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(thoth_example))
+
+    assert.equals("bg3_thoth", vim.bo.filetype)
+    assert.equals("-- %s", vim.bo.commentstring)
+    assert.equals(":--", vim.bo.comments)
+    assert.equals(".khn", vim.bo.suffixesadd)
   end)
 
   it("does not claim ordinary text files", function()
