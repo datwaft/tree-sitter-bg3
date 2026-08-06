@@ -1,5 +1,6 @@
 local root = assert(vim.env.BG3_TEST_ROOT, "BG3_TEST_ROOT is required")
 local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.txt"
+local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
 
 local function open_example()
   vim.cmd("edit " .. vim.fn.fnameescape(example))
@@ -45,5 +46,23 @@ describe("BG3 Stats parser integration", function()
     end)
 
     assert.is_true(injected)
+  end)
+
+  it("parses injected LSX values with the value grammar", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(lsx_example))
+    local parser = vim.treesitter.get_parser(0)
+    parser:parse(true)
+    local injections = {}
+
+    parser:for_each_tree(function(tree, language_tree)
+      if language_tree:lang() == "bg3_stats_value" then
+        assert.is_false(tree:root():has_error())
+        injections[vim.treesitter.get_node_text(tree:root(), 0)] = true
+      end
+    end)
+
+    assert.is_true(injections["ActionResource(SpellSlot,1,1);Proficiency(LightArmor)"])
+    assert.is_true(injections["SelectSpells(11111111-1111-1111-1111-111111111111,1,0)"])
+    assert.is_nil(injections.TestProgression)
   end)
 end)

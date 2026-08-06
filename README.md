@@ -87,6 +87,12 @@ Add both grammars to `ensure_installed` and point their overrides at this reposi
 
 The bundled filetype detection recognizes `.txt` files below a `Stats/Generated` directory. For files elsewhere, use `:setfiletype bg3_stats`.
 
+The plugin also detects `.lsx` files as `bg3_lsx` and uses Neovim's XML parser
+for the outer document. Selected `LSString` fields, including `Boosts`,
+`Selectors`, and typed symbol lists, inject `bg3_stats_value`. XML entities are
+not decoded before injection, so escaped expression text can have partial
+highlighting.
+
 ## License
 
 [MIT](LICENSE)
