@@ -1,0 +1,33 @@
+[package]
+name = "tree-sitter-bg3"
+version = "0.1.0"
+description = "Tree-sitter grammars for Baldur's Gate 3 Stats files"
+authors = ["datwaft"]
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/datwaft/tree-sitter-bg3"
+build = "bindings/rust/build.rs"
+include = [
+  "bindings/rust/*",
+  "tree-sitter-bg3-stats/src/*",
+  "tree-sitter-bg3-stats/src/tree_sitter/*",
+  "tree-sitter-bg3-stats/queries/*",
+  "tree-sitter-bg3-stats-value/src/*",
+  "tree-sitter-bg3-stats-value/src/tree_sitter/*",
+  "tree-sitter-bg3-stats-value/queries/*",
+  "Cargo.toml",
+  "LICENSE",
+  "README.md",
+]
+
+[lib]
+path = "bindings/rust/lib.rs"
+
+[dependencies]
+tree-sitter-language = "0.1.7"
+
+[build-dependencies]
+cc = "1.2"
+
+[dev-dependencies]
+tree-sitter = "0.26.11"
