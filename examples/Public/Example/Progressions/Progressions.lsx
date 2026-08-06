@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<save>
+  <region id="Progressions">
+    <node id="root">
+      <children>
+        <node id="Progression">
+          <attribute id="Boosts" type="LSString" value="ActionResource(SpellSlot,1,1);Proficiency(LightArmor)"/>
+          <attribute id="Name" type="LSString" value="TestProgression"/>
+          <attribute id="Selectors" type="LSString" value="SelectSpells(11111111-1111-1111-1111-111111111111,1,0)"/>
+          <attribute id="UUID" type="guid" value="22222222-2222-2222-2222-222222222222"/>
+        </node>
+      </children>
+    </node>
+  </region>
+</save>
