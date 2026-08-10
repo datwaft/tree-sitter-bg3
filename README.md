@@ -1,12 +1,14 @@
 # tree-sitter-bg3
 
-Tree-sitter grammars for [Baldur's Gate 3](https://baldursgate3.game/) data and Thoth files.
+Tree-sitter grammars for [Baldur's Gate 3](https://baldursgate3.game/) data,
+Thoth files, and Osiris goals.
 
-This repository contains three grammars:
+This repository contains four grammars:
 
 - `bg3_stats` parses the outer, line-oriented Stats format.
 - `bg3_stats_value` parses expressions injected into quoted `data` values.
 - `bg3_thoth` parses `.khn` helpers, including Thoth `try` and `catch` statements.
+- `bg3_osiris` parses loose Osiris goals below `Story/RawFiles/Goals`.
 
 The grammars are intended to provide syntax information for editor features such as highlighting, indentation, folding, and injections in Neovim.
 
@@ -23,7 +25,7 @@ Then configure one of the following parser managers.
 
 ### nvim-treesitter
 
-Register all three grammars before installing them:
+Register all four grammars before installing them:
 
 ```lua
 vim.api.nvim_create_autocmd("User", {
@@ -54,17 +56,26 @@ vim.api.nvim_create_autocmd("User", {
         queries = "tree-sitter-bg3-thoth/queries",
       },
     }
+
+    parsers.bg3_osiris = {
+      install_info = {
+        url = "https://github.com/datwaft/tree-sitter-bg3",
+        location = "tree-sitter-bg3-osiris",
+        queries = "tree-sitter-bg3-osiris/queries",
+      },
+    }
   end,
 })
 
-require("nvim-treesitter").install({ "bg3_stats", "bg3_stats_value", "bg3_thoth" })
+require("nvim-treesitter").install({ "bg3_stats", "bg3_stats_value", "bg3_thoth", "bg3_osiris" })
 ```
 
 See the [nvim-treesitter documentation](https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages) for the complete plugin setup.
 
 ### Arborist
 
-Add all three grammars to `ensure_installed` and point their overrides at this repository:
+Add all four grammars to `ensure_installed` and point their overrides at this
+repository:
 
 ```lua
 {
@@ -75,6 +86,7 @@ Add all three grammars to `ensure_installed` and point their overrides at this r
       "bg3_stats",
       "bg3_stats_value",
       "bg3_thoth",
+      "bg3_osiris",
     },
     overrides = {
       bg3_stats = {
@@ -89,12 +101,18 @@ Add all three grammars to `ensure_installed` and point their overrides at this r
         url = "https://github.com/datwaft/tree-sitter-bg3",
         location = "tree-sitter-bg3-thoth",
       },
+      bg3_osiris = {
+        url = "https://github.com/datwaft/tree-sitter-bg3",
+        location = "tree-sitter-bg3-osiris",
+      },
     },
   },
 }
 ```
 
-The bundled filetype detection recognizes `.txt` files below a `Stats/Generated` directory. For files elsewhere, use `:setfiletype bg3_stats`.
+The bundled filetype detection recognizes `.txt` files below a
+`Stats/Generated` directory as `bg3_stats`. It recognizes `.txt` files below
+`Story/RawFiles/Goals` as `bg3_osiris`. Other text files remain unclaimed.
 
 The plugin also detects `.lsx` files as `bg3_lsx` and uses Neovim's XML parser
 for the outer document. Selected `LSString` fields, including `Boosts`,
@@ -108,6 +126,11 @@ commit `10fe005`. The repository vendors the grammar source and adds the
 verified `try` and `catch` syntax used by BG3 helper scripts. The upstream
 grammar remains under its original MIT license in
 [`LICENSE.tree-sitter-lua`](LICENSE.tree-sitter-lua).
+
+The Osiris grammar parses raw goal metadata, INIT, KB, and EXIT sections,
+`IF`, `PROC`, and `QRY` rules, typed values, comparisons, facts, actions, and
+parent-goal edges. It provides syntax structure only. It does not compile or
+execute a Story, validate engine APIs, or infer Osiris types.
 
 ## License
 

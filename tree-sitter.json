@@ -28,12 +28,21 @@
       "locals": "tree-sitter-bg3-thoth/queries/locals.scm",
       "tags": "tree-sitter-bg3-thoth/queries/tags.scm",
       "injection-regex": "^bg3_thoth$"
+    },
+    {
+      "name": "bg3_osiris",
+      "camelcase": "Bg3Osiris",
+      "scope": "source.bg3-osiris",
+      "path": "tree-sitter-bg3-osiris",
+      "highlights": "tree-sitter-bg3-osiris/queries/highlights.scm",
+      "tags": "tree-sitter-bg3-osiris/queries/tags.scm",
+      "injection-regex": "^bg3_osiris$"
     }
   ],
   "metadata": {
-    "version": "0.2.0",
+    "version": "0.3.0",
     "license": "MIT",
-    "description": "Tree-sitter grammars for Baldur's Gate 3 data and Thoth files",
+    "description": "Tree-sitter grammars for Baldur's Gate 3 data, Thoth, and Osiris files",
     "links": {
       "repository": "https://github.com/datwaft/tree-sitter-bg3"
     },

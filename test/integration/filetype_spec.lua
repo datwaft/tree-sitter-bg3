@@ -2,6 +2,7 @@ local root = assert(vim.env.BG3_TEST_ROOT, "BG3_TEST_ROOT is required")
 local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.txt"
 local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
 local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
+local osiris_example = root .. "/examples/Mods/Example/Story/RawFiles/Goals/Example_Main.txt"
 
 local function delete_buffers()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
@@ -38,12 +39,22 @@ describe("BG3 Stats filetype", function()
     assert.equals(".khn", vim.bo.suffixesadd)
   end)
 
+  it("detects Osiris goal files and applies buffer options", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(osiris_example))
+
+    assert.equals("bg3_osiris", vim.bo.filetype)
+    assert.equals("// %s", vim.bo.commentstring)
+    assert.equals("://,s1:/*,mb:*,ex:*/", vim.bo.comments)
+    assert.equals(".txt", vim.bo.suffixesadd)
+  end)
+
   it("does not claim ordinary text files", function()
     local buffer = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_name(buffer, root .. "/examples/notes.txt")
     vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { "ordinary prose" })
 
     assert.not_equals("bg3_stats", vim.filetype.match({ buf = buffer }))
+    assert.not_equals("bg3_osiris", vim.filetype.match({ buf = buffer }))
   end)
 
   it("does not inspect BG3-looking content outside Stats/Generated", function()

@@ -1,0 +1,283 @@
+==================
+Complete goal structure
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+
+INITSECTION
+DB_Example_Ready(1);
+
+KBSECTION
+
+IF
+ExampleEvent((CHARACTER)_Actor, _, -1, (ArbitraryType)+2, 3.5, "text", L"wide", 11111111-1111-1111-1111-111111111111, CHARACTERGUID_S_Example_22222222-2222-2222-2222-222222222222)
+AND
+NOT DB_Example_Disabled(_Actor)
+AND
+_Value >= 1
+AND
+NOT _Value == -1
+THEN
+DB_Example_Seen(_Actor);
+NOT DB_Example_Pending(_Actor);
+GoalCompleted;
+
+PROC
+PROC_Example((INTEGER)_Value)
+THEN
+(CHARACTER)_Actor.ApplyExample(_Value);
+
+QRY
+QRY_Example((INTEGER)_Value)
+AND
+DB_Example_Seen(_)
+THEN
+DB_NOOP(1);
+
+EXITSECTION
+NOT DB_Example_Ready(1);
+GoalCompleted;
+ENDEXITSECTION
+
+ParentTargetEdge "Example_Parent"
+ParentTargetEdge "Example_OtherParent"
+
+---
+
+(source_file
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section
+    (fact_statement
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_constant
+            (integer))))))
+  (kb_section
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_variable
+            (type_cast
+              (identifier))
+            (local_variable))
+          (typed_variable
+            (anonymous_variable))
+          (typed_constant
+            (integer))
+          (typed_constant
+            (type_cast
+              (identifier))
+            (integer))
+          (typed_constant
+            (real))
+          (typed_constant
+            (string_literal
+              (string_content)))
+          (typed_constant
+            (string_literal
+              (string_content)))
+          (typed_constant
+            (guid_literal))
+          (typed_constant
+            (guid_literal))))
+      (condition
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (local_variable)))))
+      (condition
+        (comparison_expression
+          (typed_variable
+            (local_variable))
+          (comparison_operator)
+          (typed_constant
+            (integer))))
+      (condition
+        (comparison_expression
+          (typed_variable
+            (local_variable))
+          (comparison_operator)
+          (typed_constant
+            (integer))))
+      (action_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (local_variable)))))
+      (action_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (local_variable)))))
+      (goal_completed_statement))
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_variable
+            (type_cast
+              (identifier))
+            (local_variable))))
+      (action_statement
+        (call_expression
+          (typed_variable
+            (type_cast
+              (identifier))
+            (local_variable))
+          (identifier)
+          (argument_list
+            (typed_variable
+              (local_variable))))))
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_variable
+            (type_cast
+              (identifier))
+            (local_variable))))
+      (condition
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (anonymous_variable)))))
+      (action_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_constant
+              (integer)))))))
+  (exit_section
+    (fact_statement
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_constant
+            (integer)))))
+    (goal_completed_statement))
+  (parent_target_edge
+    (string_literal
+      (string_content)))
+  (parent_target_edge
+    (string_literal
+      (string_content))))
+
+==================
+Empty sections and comments
+==================
+
+// A top-level goal can omit a parent edge.
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+/* Empty initialization. */
+KBSECTION
+EXITSECTION
+ENDEXITSECTION // A line comment can end at EOF.
+
+---
+
+(source_file
+  (comment)
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (comment)
+  (kb_section)
+  (exit_section)
+  (comment))
+
+==================
+Incomplete rule recovery
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+IF
+ExampleEvent(_Actor
+THEN
+DB_Example_Seen(_Actor);
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(source_file
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (kb_section
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_variable
+            (local_variable))
+          (MISSING ")")))
+      (action_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (local_variable)))))))
+  (exit_section))
+
+==================
+Incorrect section order recovery
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+KBSECTION
+INITSECTION
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(ERROR
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (ERROR
+    (identifier))
+  (identifier)
+  (identifier))
+
+==================
+Unterminated string recovery
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_Example("unterminated);
+KBSECTION
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(source_file
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (ERROR
+    (identifier)
+    (string_content))
+  (kb_section)
+  (exit_section))

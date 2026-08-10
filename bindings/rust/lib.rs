@@ -1,4 +1,4 @@
-//! Rust bindings for the Baldur's Gate 3 data and Thoth grammars.
+//! Rust bindings for the Baldur's Gate 3 data, Thoth, and Osiris grammars.
 
 use tree_sitter_language::LanguageFn;
 
@@ -9,6 +9,7 @@ unsafe extern "C" {
     fn tree_sitter_bg3_stats() -> *const ();
     fn tree_sitter_bg3_stats_value() -> *const ();
     fn tree_sitter_bg3_thoth() -> *const ();
+    fn tree_sitter_bg3_osiris() -> *const ();
 }
 
 /// The Tree-sitter language for legacy BG3 Stats source files.
@@ -20,6 +21,9 @@ pub const BG3_STATS_VALUE_LANGUAGE: LanguageFn =
 
 /// The Tree-sitter language for BG3 Thoth helper source files.
 pub const BG3_THOTH_LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_bg3_thoth) };
+
+/// The Tree-sitter language for BG3 Osiris goal source files.
+pub const BG3_OSIRIS_LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_bg3_osiris) };
 
 /// Highlight query for legacy BG3 Stats source files.
 pub const BG3_STATS_HIGHLIGHTS_QUERY: &str =
@@ -37,9 +41,15 @@ pub const BG3_STATS_VALUE_HIGHLIGHTS_QUERY: &str =
 pub const BG3_THOTH_HIGHLIGHTS_QUERY: &str =
     include_str!("../../tree-sitter-bg3-thoth/queries/highlights.scm");
 
+/// Highlight query for BG3 Osiris goal source files.
+pub const BG3_OSIRIS_HIGHLIGHTS_QUERY: &str =
+    include_str!("../../tree-sitter-bg3-osiris/queries/highlights.scm");
+
 #[cfg(test)]
 mod tests {
-    use super::{BG3_STATS_LANGUAGE, BG3_STATS_VALUE_LANGUAGE, BG3_THOTH_LANGUAGE};
+    use super::{
+        BG3_OSIRIS_LANGUAGE, BG3_STATS_LANGUAGE, BG3_STATS_VALUE_LANGUAGE, BG3_THOTH_LANGUAGE,
+    };
     use tree_sitter::Parser;
 
     /// Verifies that the generated Stats parser links and accepts representative syntax.
@@ -98,5 +108,24 @@ mod tests {
             tree.root_node().named_child(0).unwrap().kind(),
             "function_declaration"
         );
+    }
+
+    /// Verifies that the Osiris parser accepts a representative synthetic goal.
+    #[test]
+    fn parses_osiris_source() {
+        let mut parser = Parser::new();
+        parser
+            .set_language(&BG3_OSIRIS_LANGUAGE.into())
+            .expect("the Osiris grammar must load");
+
+        let tree = parser
+            .parse(
+                "Version 1\nSubGoalCombiner SGC_AND\nINITSECTION\nKBSECTION\nIF\nExampleEvent((CHARACTER)_Actor)\nTHEN\nDB_Example_Seen(_Actor);\nEXITSECTION\nENDEXITSECTION\n",
+                None,
+            )
+            .expect("the Osiris parser must return a tree");
+
+        assert!(!tree.root_node().has_error());
+        assert_eq!(tree.root_node().kind(), "source_file");
     }
 }

@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-bg3"
-version = "0.2.0"
-description = "Tree-sitter grammars for Baldur's Gate 3 data and Thoth files"
+version = "0.3.0"
+description = "Tree-sitter grammars for Baldur's Gate 3 data, Thoth, and Osiris files"
 authors = ["datwaft"]
 edition = "2024"
 license = "MIT"
@@ -18,6 +18,9 @@ include = [
   "tree-sitter-bg3-thoth/src/*",
   "tree-sitter-bg3-thoth/src/tree_sitter/*",
   "tree-sitter-bg3-thoth/queries/*",
+  "tree-sitter-bg3-osiris/src/*",
+  "tree-sitter-bg3-osiris/src/tree_sitter/*",
+  "tree-sitter-bg3-osiris/queries/*",
   "Cargo.toml",
   "LICENSE",
   "LICENSE.tree-sitter-lua",

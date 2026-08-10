@@ -5,5 +5,6 @@ vim.filetype.add({
   },
   pattern = {
     [".*/Stats/Generated/.*%.txt"] = "bg3_stats",
+    [".*/Story/RawFiles/Goals/.*%.txt"] = "bg3_osiris",
   },
 })

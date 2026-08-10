@@ -2,6 +2,7 @@ local root = assert(vim.env.BG3_TEST_ROOT, "BG3_TEST_ROOT is required")
 local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.txt"
 local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
 local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
+local osiris_example = root .. "/examples/Mods/Example/Story/RawFiles/Goals/Example_Main.txt"
 
 local function open_example()
   vim.cmd("edit " .. vim.fn.fnameescape(example))
@@ -37,6 +38,10 @@ describe("BG3 Stats parser integration", function()
     assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "folds"))
     assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "locals"))
     assert.is_not_nil(vim.treesitter.query.get("bg3_thoth", "tags"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_osiris", "highlights"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_osiris", "indents"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_osiris", "folds"))
+    assert.is_not_nil(vim.treesitter.query.get("bg3_osiris", "tags"))
   end)
 
   it("parses Thoth helpers and exception handling", function()
@@ -53,6 +58,33 @@ describe("BG3 Stats parser integration", function()
       exceptions = exceptions + 1
     end
     assert.equals(1, exceptions)
+  end)
+
+  it("parses Osiris goals and exposes fold and tag captures", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(osiris_example))
+    local trees = vim.treesitter.get_parser(0, "bg3_osiris"):parse(true)
+    local tree = assert(trees[1], "expected an Osiris syntax tree")
+
+    assert.equals(1, #trees)
+    assert.is_false(tree:root():has_error())
+
+    local folds = assert(vim.treesitter.query.get("bg3_osiris", "folds"))
+    local fold_count = 0
+    for _, _ in folds:iter_captures(tree:root(), 0) do
+      fold_count = fold_count + 1
+    end
+    assert.is_true(fold_count >= 4)
+
+    local tags = assert(vim.treesitter.query.get("bg3_osiris", "tags"))
+    local definitions = 0
+    local references = 0
+    for capture in tags:iter_captures(tree:root(), 0) do
+      local name = tags.captures[capture]
+      if name == "definition.function" then definitions = definitions + 1 end
+      if name == "reference.call" then references = references + 1 end
+    end
+    assert.equals(2, definitions)
+    assert.is_true(references > 0)
   end)
 
   it("parses injected data values with the value grammar", function()
