@@ -42,6 +42,20 @@ describe("BG3 Stats filetype", function()
     assert.equals("nc", vim.wo.concealcursor)
   end)
 
+  it("keeps localization buffers usable without an XML parser", function()
+    local get_parser = vim.treesitter.get_parser
+    vim.treesitter.get_parser = function() return nil end
+    local buffer = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_set_current_buf(buffer)
+
+    vim.cmd("runtime ftplugin/bg3_localization.lua")
+
+    vim.treesitter.get_parser = get_parser
+    assert.equals("<!-- %s -->", vim.bo[buffer].commentstring)
+    assert.is_true(vim.b[buffer].bg3_localization_markup)
+    assert.is_nil(vim.treesitter.highlighter.active[buffer])
+  end)
+
   it("does not claim XML outside localization language directories", function()
     local buffer = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_name(buffer, root .. "/examples/english.xml")

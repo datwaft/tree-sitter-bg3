@@ -1,6 +1,6 @@
 -- BG3 localization uses the standard XML grammar with readable inline markup.
 vim.treesitter.language.register("xml", "bg3_localization")
-vim.treesitter.start(0, "xml")
+if vim.treesitter.get_parser(0, "xml", { error = false }) then vim.treesitter.start(0, "xml") end
 require("bg3_localization").setup(0)
 
 vim.bo.commentstring = "<!-- %s -->"
