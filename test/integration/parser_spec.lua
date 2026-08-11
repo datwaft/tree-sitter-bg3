@@ -123,18 +123,20 @@ describe("BG3 Stats parser integration", function()
 
   it("conceals escaped localization delimiters and leaves literal greater-than signs", function()
     vim.cmd("edit " .. vim.fn.fnameescape(localization_example))
+    vim.treesitter.start(0, "xml")
     local tree = assert(vim.treesitter.get_parser(0, "xml"):parse(true)[1])
     local query = assert(vim.treesitter.query.get("xml", "highlights"))
     local concealed = { ["<"] = {}, [">"] = {} }
 
     for _, match, metadata in query:iter_matches(tree:root(), 0, 0, -1, { all = true }) do
-      if metadata.conceal then
-        for capture, nodes in pairs(match) do
+      for capture, nodes in pairs(match) do
+        local capture_metadata = metadata[capture]
+        if capture_metadata and capture_metadata.conceal then
           if query.captures[capture] == "conceal" then
             for _, node in ipairs(nodes) do
               local row, column, end_row, end_column = node:range()
               local position = table.concat({ row, column, end_row, end_column }, ":")
-              concealed[metadata.conceal][position] = vim.treesitter.get_node_text(node, 0)
+              concealed[capture_metadata.conceal][position] = vim.treesitter.get_node_text(node, 0)
             end
           end
         end
@@ -143,11 +145,23 @@ describe("BG3 Stats parser integration", function()
 
     assert.equals(4, vim.tbl_count(concealed["<"]))
     assert.equals(2, vim.tbl_count(concealed[">"]))
-    for _, entity in pairs(concealed["<"]) do assert.equals("&lt;", entity) end
-    for _, entity in pairs(concealed[">"]) do assert.equals("&gt;", entity) end
+    for _, entity in pairs(concealed["<"]) do
+      assert.equals("&lt;", entity)
+    end
+    for _, entity in pairs(concealed[">"]) do
+      assert.equals("&gt;", entity)
+    end
     local source = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
     assert.is_truthy(source:find('Tooltip="Literal">', 1, true))
     assert.is_truthy(source:find("Comparison: 3 > 2", 1, true))
     assert.is_truthy(source:find("<metadata>&lt;Outside&gt;</metadata>", 1, true))
+
+    for column = 3, 9 do
+      local inspected = vim.inspect_pos(0, 2, column, { treesitter = true, syntax = false, extmarks = false })
+      for _, capture in ipairs(inspected.treesitter) do
+        local capture_metadata = capture.metadata[capture.id] or {}
+        assert.is_nil(capture_metadata.conceal, "outer content tag must not be concealed")
+      end
+    end
   end)
 end)
