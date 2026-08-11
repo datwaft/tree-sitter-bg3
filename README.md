@@ -5,6 +5,8 @@ Thoth files, and Osiris goals.
 
 Version 0.4.0 adds transparent loose LSF editing through `bg3-ls`, readable
 localization markup, and independent highlighting for `LSTag` tooltip fields.
+Version 0.4.1 keeps localization buffers usable when the optional XML parser
+is not installed.
 
 This repository contains four grammars:
 
