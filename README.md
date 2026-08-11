@@ -3,6 +3,9 @@
 Tree-sitter grammars for [Baldur's Gate 3](https://baldursgate3.game/) data,
 Thoth files, and Osiris goals.
 
+Version 0.4.0 adds transparent loose LSF editing through `bg3-ls`, readable
+localization markup, and independent highlighting for `LSTag` tooltip fields.
+
 This repository contains four grammars:
 
 - `bg3_stats` parses the outer, line-oriented Stats format.
