@@ -124,6 +124,8 @@ Loose `Localization/<Language>/*.xml` files use the `bg3_localization`
 filetype and the standard XML parser. The bundled highlight query displays
 `&lt;` and `&gt;` delimiters inside `<content>` values as `<` and `>` while
 leaving the source text unchanged. A literal `>` remains visible as written.
+Encoded and literal `LSTag` markup highlights tag names, delimiters, Tooltip
+attributes, and quoted tooltip keys independently from surrounding prose.
 The filetype uses `conceallevel=2` and `concealcursor=nc`, so insert mode shows
 the exact entity spelling while normal mode shows readable inline tags. Override
 these window options from a `FileType` autocmd if a different editing view is
