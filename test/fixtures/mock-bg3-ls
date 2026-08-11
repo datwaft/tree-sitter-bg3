@@ -1,0 +1,33 @@
+#!/bin/sh
+set -eu
+
+if [ "$1" != "convert" ]; then
+  echo "expected convert command" >&2
+  exit 2
+fi
+
+source_path=$2
+destination_path=$3
+
+case "$source_path" in
+  *.lsf)
+    printf '%s\n' \
+      '<?xml version="1.0" encoding="utf-8"?>' \
+      '<save>' \
+      '  <version major="4" minor="0" revision="9" build="331" lsf_version="7"/>' \
+      '  <region id="root"><node id="root"/></region>' \
+      '</save>' > "$destination_path"
+    ;;
+  *.lsx)
+    if grep -q INVALID "$source_path"; then
+      echo "synthetic conversion failure" >&2
+      exit 3
+    fi
+    printf 'LSOF' > "$destination_path"
+    cat "$source_path" >> "$destination_path"
+    ;;
+  *)
+    echo "unsupported source" >&2
+    exit 4
+    ;;
+esac

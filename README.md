@@ -129,6 +129,25 @@ the exact entity spelling while normal mode shows readable inline tags. Override
 these window options from a `FileType` autocmd if a different editing view is
 preferred.
 
+### Transparent LSF editing
+
+With `bg3-ls` 0.8.0 or newer on `PATH`, opening a loose `.lsf` file displays
+its textual LSX representation in a `bg3_lsf` buffer. Writing the buffer
+compiles it back to LSF. The original binary is replaced only after conversion
+succeeds and the result has an `LSOF` signature. File permissions are
+preserved, and a save is rejected if another process changed the LSF after it
+was opened.
+
+The adapter invokes the converter directly without a shell. Override the
+command when testing a source build:
+
+```lua
+vim.g.bg3_lsf_converter = { "cargo", "run", "-p", "bg3-ls", "--" }
+```
+
+Conversion errors leave the original LSF unchanged and keep the buffer
+modified. Use `:edit!` to reload after an external change.
+
 The plugin detects `.khn` files as `bg3_thoth`. The Thoth grammar derives from
 [`tree-sitter-lua`](https://github.com/tree-sitter-grammars/tree-sitter-lua)
 commit `10fe005`. The repository vendors the grammar source and adds the
