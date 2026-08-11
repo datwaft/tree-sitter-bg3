@@ -123,7 +123,6 @@ describe("BG3 Stats parser integration", function()
 
   it("conceals escaped localization delimiters and leaves literal greater-than signs", function()
     vim.cmd("edit " .. vim.fn.fnameescape(localization_example))
-    vim.treesitter.start(0, "xml")
     local tree = assert(vim.treesitter.get_parser(0, "xml"):parse(true)[1])
     local query = assert(vim.treesitter.query.get("xml", "highlights"))
     local concealed = { ["<"] = {}, [">"] = {} }
@@ -163,5 +162,35 @@ describe("BG3 Stats parser integration", function()
         assert.is_nil(capture_metadata.conceal, "outer content tag must not be concealed")
       end
     end
+  end)
+
+  it("highlights encoded and literal LSTag markup independently from prose", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(localization_example))
+
+    local function extmark_groups(row, column)
+      local inspected = vim.inspect_pos(0, row, column, { treesitter = false, syntax = false, extmarks = true })
+      local groups = {}
+      for _, extmark in ipairs(inspected.extmarks) do
+        if extmark.opts.hl_group then groups[extmark.opts.hl_group] = true end
+      end
+      return groups
+    end
+
+    local encoded = vim.api.nvim_buf_get_lines(0, 2, 3, false)[1]
+    local encoded_name = assert(encoded:find("LSTag", 1, true)) - 1
+    local encoded_attribute = assert(encoded:find("Tooltip", 1, true)) - 1
+    local encoded_value = assert(encoded:find('"Escaped"', 1, true)) - 1
+    assert.is_true(extmark_groups(2, encoded_name)["@tag"])
+    assert.is_true(extmark_groups(2, encoded_attribute)["@tag.attribute"])
+    assert.is_true(extmark_groups(2, encoded_value)["@string.special"])
+
+    local literal = vim.api.nvim_buf_get_lines(0, 3, 4, false)[1]
+    local literal_name = assert(literal:find("LSTag", 1, true)) - 1
+    local literal_attribute = assert(literal:find("Tooltip", 1, true)) - 1
+    assert.is_true(extmark_groups(3, literal_name)["@tag"])
+    assert.is_true(extmark_groups(3, literal_attribute)["@tag.attribute"])
+
+    vim.api.nvim_buf_set_lines(0, 3, 4, false, { "  <content>plain text</content>" })
+    assert.is_nil(extmark_groups(3, 12)["@tag"])
   end)
 end)
