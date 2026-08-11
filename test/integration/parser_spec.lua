@@ -3,6 +3,7 @@ local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.t
 local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
 local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
 local osiris_example = root .. "/examples/Mods/Example/Story/RawFiles/Goals/Example_Main.txt"
+local localization_example = root .. "/examples/Mods/Example/Localization/English/english.xml"
 
 local function open_example()
   vim.cmd("edit " .. vim.fn.fnameescape(example))
@@ -118,5 +119,35 @@ describe("BG3 Stats parser integration", function()
     assert.is_true(injections["ActionResource(SpellSlot,1,1);Proficiency(LightArmor)"])
     assert.is_true(injections["SelectSpells(11111111-1111-1111-1111-111111111111,1,0)"])
     assert.is_nil(injections.TestProgression)
+  end)
+
+  it("conceals escaped localization delimiters and leaves literal greater-than signs", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(localization_example))
+    local tree = assert(vim.treesitter.get_parser(0, "xml"):parse(true)[1])
+    local query = assert(vim.treesitter.query.get("xml", "highlights"))
+    local concealed = { ["<"] = {}, [">"] = {} }
+
+    for _, match, metadata in query:iter_matches(tree:root(), 0, 0, -1, { all = true }) do
+      if metadata.conceal then
+        for capture, nodes in pairs(match) do
+          if query.captures[capture] == "conceal" then
+            for _, node in ipairs(nodes) do
+              local row, column, end_row, end_column = node:range()
+              local position = table.concat({ row, column, end_row, end_column }, ":")
+              concealed[metadata.conceal][position] = vim.treesitter.get_node_text(node, 0)
+            end
+          end
+        end
+      end
+    end
+
+    assert.equals(4, vim.tbl_count(concealed["<"]))
+    assert.equals(2, vim.tbl_count(concealed[">"]))
+    for _, entity in pairs(concealed["<"]) do assert.equals("&lt;", entity) end
+    for _, entity in pairs(concealed[">"]) do assert.equals("&gt;", entity) end
+    local source = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+    assert.is_truthy(source:find('Tooltip="Literal">', 1, true))
+    assert.is_truthy(source:find("Comparison: 3 > 2", 1, true))
+    assert.is_truthy(source:find("<metadata>&lt;Outside&gt;</metadata>", 1, true))
   end)
 end)

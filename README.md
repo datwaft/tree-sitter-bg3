@@ -120,6 +120,15 @@ for the outer document. Selected `LSString` fields, including `Boosts`,
 not decoded before injection, so escaped expression text can have partial
 highlighting.
 
+Loose `Localization/<Language>/*.xml` files use the `bg3_localization`
+filetype and the standard XML parser. The bundled highlight query displays
+`&lt;` and `&gt;` delimiters inside `<content>` values as `<` and `>` while
+leaving the source text unchanged. A literal `>` remains visible as written.
+The filetype uses `conceallevel=2` and `concealcursor=nc`, so insert mode shows
+the exact entity spelling while normal mode shows readable inline tags. Override
+these window options from a `FileType` autocmd if a different editing view is
+preferred.
+
 The plugin detects `.khn` files as `bg3_thoth`. The Thoth grammar derives from
 [`tree-sitter-lua`](https://github.com/tree-sitter-grammars/tree-sitter-lua)
 commit `10fe005`. The repository vendors the grammar source and adds the
