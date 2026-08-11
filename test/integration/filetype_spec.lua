@@ -3,6 +3,7 @@ local example = root .. "/examples/Public/Example/Stats/Generated/Data/Passive.t
 local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.lsx"
 local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
 local osiris_example = root .. "/examples/Mods/Example/Story/RawFiles/Goals/Example_Main.txt"
+local localization_example = root .. "/examples/Mods/Example/Localization/English/english.xml"
 
 local function delete_buffers()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
@@ -28,6 +29,24 @@ describe("BG3 Stats filetype", function()
     assert.equals("bg3_lsx", vim.bo.filetype)
     assert.equals("<!-- %s -->", vim.bo.commentstring)
     assert.equals("xml", vim.treesitter.language.get_lang("bg3_lsx"))
+  end)
+
+  it("detects localization XML and enables readable inline markup", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(localization_example))
+
+    assert.equals("bg3_localization", vim.bo.filetype)
+    assert.equals("<!-- %s -->", vim.bo.commentstring)
+    assert.equals("xml", vim.treesitter.language.get_lang("bg3_localization"))
+    assert.equals(2, vim.wo.conceallevel)
+    assert.equals("nc", vim.wo.concealcursor)
+  end)
+
+  it("does not claim XML outside localization language directories", function()
+    local buffer = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(buffer, root .. "/examples/english.xml")
+    vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { "<contentList/>" })
+
+    assert.not_equals("bg3_localization", vim.filetype.match({ buf = buffer }))
   end)
 
   it("detects Thoth helper files and applies buffer options", function()
