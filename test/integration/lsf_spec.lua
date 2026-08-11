@@ -43,6 +43,7 @@ describe("transparent BG3 LSF editing", function()
     assert.equals("bg3_lsf", vim.bo.filetype)
     assert.equals("acwrite", vim.bo.buftype)
     assert.equals("xml", vim.treesitter.language.get_lang("bg3_lsf"))
+    assert.is_not_nil(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()])
     assert.is_truthy(table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n"):find("<save>", 1, true))
 
     local writes = 0

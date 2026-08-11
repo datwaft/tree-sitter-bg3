@@ -11,7 +11,7 @@
  (#eq? @_content_list "contentList")
  (#eq? @_content "content")
  (#eq? @conceal "&lt;")
- (#set! conceal "<"))
+ (#set! @conceal conceal "<"))
 
 ((element
    (STag (Name) @_content_list)
@@ -22,4 +22,4 @@
  (#eq? @_content_list "contentList")
  (#eq? @_content "content")
  (#eq? @conceal "&gt;")
- (#set! conceal ">"))
+ (#set! @conceal conceal ">"))
