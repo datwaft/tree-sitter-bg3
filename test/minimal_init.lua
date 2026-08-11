@@ -8,3 +8,4 @@ vim.opt.swapfile = false
 vim.opt.undofile = false
 vim.opt.shadafile = "NONE"
 vim.cmd("filetype plugin on")
+vim.cmd.runtime("plugin/bg3_lsf.lua")
