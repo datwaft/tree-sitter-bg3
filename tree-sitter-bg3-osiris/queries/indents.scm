@@ -8,8 +8,9 @@
 [
   "KBSECTION"
   "EXITSECTION"
-  "ENDEXITSECTION"
 ] @indent.end
+
+"ENDEXITSECTION" @indent.end @indent.branch
 
 [
   "AND"

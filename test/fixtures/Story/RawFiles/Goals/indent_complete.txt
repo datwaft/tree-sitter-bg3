@@ -1,0 +1,35 @@
+Version 1
+SubGoalCombiner SGC_AND
+
+INITSECTION
+  DB_Example_Ready(1);
+
+KBSECTION
+  IF
+    ExampleEvent((CHARACTER)_Actor, _Value)
+  AND
+    NOT DB_Example_Disabled(_Actor)
+  AND
+    _Value >= 1
+  THEN
+    DB_Example_Seen(_Actor);
+    NOT DB_Example_Pending(_Actor);
+
+  PROC
+    PROC_Example_Clear((CHARACTER)_Actor)
+  THEN
+    NOT DB_Example_Seen(_Actor);
+
+  QRY
+    QRY_Example_IsReady()
+  AND
+    DB_Example_Ready(1)
+  THEN
+    DB_NOOP(1);
+
+EXITSECTION
+  NOT DB_Example_Ready(1);
+  GoalCompleted;
+ENDEXITSECTION
+
+ParentTargetEdge "Example_Parent"
