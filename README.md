@@ -7,6 +7,8 @@ Version 0.4.0 adds transparent loose LSF editing through `bg3-ls`, readable
 localization markup, and independent highlighting for `LSTag` tooltip fields.
 Version 0.4.1 keeps localization buffers usable when the optional XML parser
 is not installed.
+Version 0.4.2 keeps the Osiris `ENDEXITSECTION` directive at column zero when
+Neovim reindents a goal.
 
 This repository contains four grammars:
 
