@@ -4,6 +4,7 @@ local lsx_example = root .. "/examples/Public/Example/Progressions/Progressions.
 local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Conditions.khn"
 local osiris_example = root .. "/examples/Mods/Example/Story/RawFiles/Goals/Example_Main.txt"
 local localization_example = root .. "/examples/Mods/Example/Localization/English/english.xml"
+local osiris_indent_fixtures = root .. "/test/fixtures/Story/RawFiles/Goals/"
 
 local function open_example()
   vim.cmd("edit " .. vim.fn.fnameescape(example))
@@ -14,6 +15,42 @@ local function delete_buffers()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buffer) then vim.api.nvim_buf_delete(buffer, { force = true }) end
   end
+end
+
+local function osiris_indentexpr()
+  local line = vim.v.lnum - 1
+  local parser = vim.treesitter.get_parser(0, "bg3_osiris")
+  local tree = assert(parser:parse(true)[1], "expected an Osiris syntax tree")
+  local query = assert(vim.treesitter.query.get("bg3_osiris", "indents"))
+  local indent = 0
+
+  for capture, node in query:iter_captures(tree:root(), 0) do
+    local name = query.captures[capture]
+    local start_row, _, end_row = node:range()
+    if name == "indent.begin" and start_row < line and line <= end_row then
+      indent = indent + vim.fn.shiftwidth()
+    elseif name == "indent.branch" and start_row == line then
+      indent = indent - vim.fn.shiftwidth()
+    end
+  end
+
+  return indent
+end
+
+_G.bg3_test_osiris_indentexpr = osiris_indentexpr
+
+local function assert_osiris_reindent_round_trip(name)
+  vim.cmd("edit " .. vim.fn.fnameescape(osiris_indent_fixtures .. name))
+  local expected = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local unindented = vim.tbl_map(function(line) return (line:gsub("^%s+", "")) end, expected)
+
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, unindented)
+  vim.bo.expandtab = true
+  vim.bo.shiftwidth = 2
+  vim.bo.indentexpr = "v:lua.bg3_test_osiris_indentexpr()"
+  vim.cmd("normal! gg=G")
+
+  assert.same(expected, vim.api.nvim_buf_get_lines(0, 0, -1, false))
 end
 
 describe("BG3 Stats parser integration", function()
@@ -87,6 +124,16 @@ describe("BG3 Stats parser integration", function()
     assert.equals(2, definitions)
     assert.is_true(references > 0)
   end)
+
+  it(
+    "reindents the complete Osiris goal structure",
+    function() assert_osiris_reindent_round_trip("indent_complete.txt") end
+  )
+
+  it(
+    "keeps empty Osiris section directives at column zero",
+    function() assert_osiris_reindent_round_trip("indent_empty.txt") end
+  )
 
   it("parses injected data values with the value grammar", function()
     local parser = open_example()

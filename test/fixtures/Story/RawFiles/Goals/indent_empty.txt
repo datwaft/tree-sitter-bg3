@@ -1,0 +1,13 @@
+// Empty sections remain structurally visible.
+Version 1
+SubGoalCombiner SGC_AND
+
+INITSECTION
+// No initialization facts.
+
+KBSECTION
+// No rules.
+
+EXITSECTION
+  // No exit facts.
+ENDEXITSECTION
