@@ -9,6 +9,9 @@ Version 0.4.1 keeps localization buffers usable when the optional XML parser
 is not installed.
 Version 0.4.2 keeps the Osiris `ENDEXITSECTION` directive at column zero when
 Neovim reindents a goal.
+Version 0.4.3 reindents Thoth helpers in the StyLua style: closing tokens
+align with their opener, and multi-line call arguments, parenthesized
+expressions, and broken operator chains indent one level.
 
 This repository contains four grammars:
 
