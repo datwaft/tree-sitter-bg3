@@ -1,0 +1,92 @@
+function Example_IsThrownWeaponAttack()
+  local hitDescription = context.HitDescription
+
+  if hitDescription == nil then
+    return nil
+  end
+
+  return SpellTypeIs(SpellType.Throw)
+    & ~Example_IsThrownWeaponAttack()
+end
+
+function Example_IsWeaponAttack()
+  return Example_IsMeleeAttackMode()
+    | Example_IsRangedAttackMode()
+    | Example_IsThrownWeaponAttack()
+end
+
+function Example_HasMasteryAccess(weapon)
+  return HasPassive('Example_Access_ProficientWeapons', context.Source)
+    | (
+      HasPassive('Example_Access_MeleeWeapons', context.Source)
+      & Example_IsMeleeWeapon(weapon)
+    )
+end
+
+function Example_HasMasteryMainHandWeapon(weaponGroups)
+  if context.Source == nil then
+    return ConditionResult(false)
+  elseif context.Target == nil then
+    return ConditionResult(false)
+  else
+    return true
+  end
+
+  return Example_IsEligibleMasteryWeapon(
+    weaponGroups,
+    GetItemInEquipmentSlot(EquipmentSlot.MeleeMainHand, context.Source)
+  )
+end
+
+function Example_HasNickOffhandWeapon()
+  local offhandWeapon = GetItemInEquipmentSlot(EquipmentSlot.MeleeOffHand, context.Source)
+
+  return Example_IsEligibleMasteryWeapon(
+    'SyntheticWeaponGroup',
+    offhandWeapon
+  )
+    & HasWeaponProperty(WeaponProperties.Light, offhandWeapon)
+end
+
+function Example_CatchesErrors()
+  try
+    riskyCall()
+  catch err then
+    return ConditionResult(false)
+  end
+end
+
+function Example_Loops()
+  local total = 0
+
+  repeat
+    total = total + 1
+  until total >= 10
+
+  while total > 0 do
+    total = total - 1
+  end
+
+  for index = 1, 10 do
+    total = total + index
+  end
+
+  local payload = {
+    name = 'synthetic-dagger',
+    damage = 4,
+  }
+
+  return payload
+end
+
+function Example_AttackAbilityModifier()
+  local attackAbility = context.HitDescription.AttackAbility
+
+  if attackAbility == Ability.Strength then
+    return GetModifier(context.Source.Strength)
+  elseif attackAbility == Ability.Dexterity then
+    return GetModifier(context.Source.Dexterity)
+  end
+
+  return 0
+end

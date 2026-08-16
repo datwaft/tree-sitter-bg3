@@ -5,6 +5,7 @@ local thoth_example = root .. "/examples/Mods/Example/Scripts/thoth/helpers/Cond
 local osiris_example = root .. "/examples/Mods/Example/Story/RawFiles/Goals/Example_Main.txt"
 local localization_example = root .. "/examples/Mods/Example/Localization/English/english.xml"
 local osiris_indent_fixtures = root .. "/test/fixtures/Story/RawFiles/Goals/"
+local thoth_indent_fixtures = root .. "/test/fixtures/Mods/Example/Scripts/thoth/helpers/"
 
 local function open_example()
   vim.cmd("edit " .. vim.fn.fnameescape(example))
@@ -48,6 +49,76 @@ local function assert_osiris_reindent_round_trip(name)
   vim.bo.expandtab = true
   vim.bo.shiftwidth = 2
   vim.bo.indentexpr = "v:lua.bg3_test_osiris_indentexpr()"
+  vim.cmd("normal! gg=G")
+
+  assert.same(expected, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+end
+
+-- Mirrors the @indent.begin/@indent.branch/@indent.dedent semantics of the
+-- tree-sitter indentation evaluators Neovim ecosystem plugins run (arborist,
+-- former nvim-treesitter indent): begin adds one level after the node's first
+-- line, branch removes one level on the node's own line, dedent removes one
+-- level on lines after the node's first line, and one adjustment per start row
+-- wins. Empty lines are never reindented by `=`.
+local function thoth_indentexpr()
+  local lnum = vim.v.lnum
+  local parser = vim.treesitter.get_parser(0, "bg3_thoth")
+  local tree = assert(parser:parse(true)[1], "expected a Thoth syntax tree")
+  local query = assert(vim.treesitter.query.get("bg3_thoth", "indents"))
+
+  local captures = {}
+  for capture, node in query:iter_captures(tree:root(), 0) do
+    local id = node:id()
+    captures[id] = captures[id] or {}
+    captures[id][query.captures[capture]] = true
+  end
+
+  local line = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1] or ""
+  local _, column = line:find("^%s*")
+  local node = tree:root():descendant_for_range(lnum - 1, column, lnum - 1, column + 1)
+
+  local indent, seen = 0, {}
+  while node do
+    local start_row, _, end_row = node:range()
+    local node_captures = captures[node:id()]
+    if node_captures and not seen[start_row] then
+      local applied = false
+      if node_captures["indent.branch"] and start_row == lnum - 1 then
+        indent = indent - vim.fn.shiftwidth()
+        applied = true
+      end
+      if node_captures["indent.dedent"] and start_row ~= lnum - 1 then
+        indent = indent - vim.fn.shiftwidth()
+        applied = true
+      end
+      local parent_in_error = node:parent() and node:parent():has_error()
+      if
+        node_captures["indent.begin"]
+        and (start_row ~= end_row or parent_in_error)
+        and start_row ~= lnum - 1
+      then
+        indent = indent + vim.fn.shiftwidth()
+        applied = true
+      end
+      if applied then seen[start_row] = true end
+    end
+    node = node:parent()
+  end
+
+  return indent
+end
+
+_G.bg3_test_thoth_indentexpr = thoth_indentexpr
+
+local function assert_thoth_reindent_round_trip(name)
+  vim.cmd("edit " .. vim.fn.fnameescape(thoth_indent_fixtures .. name))
+  local expected = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local unindented = vim.tbl_map(function(line) return (line:gsub("^%s+", "")) end, expected)
+
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, unindented)
+  vim.bo.expandtab = true
+  vim.bo.shiftwidth = 2
+  vim.bo.indentexpr = "v:lua.bg3_test_thoth_indentexpr()"
   vim.cmd("normal! gg=G")
 
   assert.same(expected, vim.api.nvim_buf_get_lines(0, 0, -1, false))
@@ -128,6 +199,11 @@ describe("BG3 Stats parser integration", function()
   it(
     "reindents the complete Osiris goal structure",
     function() assert_osiris_reindent_round_trip("indent_complete.txt") end
+  )
+
+  it(
+    "reindents the complete Thoth helper structure",
+    function() assert_thoth_reindent_round_trip("indent_complete.khn") end
   )
 
   it(
