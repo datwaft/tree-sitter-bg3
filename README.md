@@ -12,6 +12,10 @@ Neovim reindents a goal.
 Version 0.4.3 reindents Thoth helpers in the StyLua style: closing tokens
 align with their opener, and multi-line call arguments, parenthesized
 expressions, and broken operator chains indent one level.
+Version 0.5.0 accepts the Unicode ellipsis character in `bg3_stats_value` as a
+placeholder for elided content in sequence and argument positions. The
+placeholder highlights as a comment, and other expression positions still
+reject it.
 
 This repository contains four grammars:
 
