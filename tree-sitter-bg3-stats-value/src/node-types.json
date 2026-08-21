@@ -8,6 +8,10 @@
       "required": false,
       "types": [
         {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         }
@@ -239,6 +243,10 @@
       "required": false,
       "types": [
         {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         }
@@ -332,6 +340,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "ellipsis",
+          "named": true
+        },
         {
           "type": "expression",
           "named": true
@@ -498,6 +510,10 @@
   },
   {
     "type": "dice_literal",
+    "named": true
+  },
+  {
+    "type": "ellipsis",
     "named": true
   },
   {
