@@ -5,6 +5,7 @@
 (boolean) @boolean
 (string_literal) @string
 (identifier) @variable
+(ellipsis) @comment
 
 (call_expression
   function: (identifier) @function.call)

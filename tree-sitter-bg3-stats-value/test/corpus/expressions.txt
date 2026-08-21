@@ -131,3 +131,52 @@ h123456789012345678901234567890123456;0ce43a83-b0d8-4666-be03-7cd804421dc6;1d6+3
       (unary_expression
         (expression
           (number))))))
+
+==================
+Ellipsis placeholders
+==================
+
+DealDamage(MainMeleeWeapon, MainMeleeWeaponDamageType);ExecuteWeaponFunctors(MainHand);…
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (expression
+            (identifier))
+          (expression
+            (identifier)))))
+    (expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (expression
+            (identifier)))))
+    (ellipsis)))
+
+==================
+Ellipsis arguments
+==================
+
+DealDamage(…);ApplyStatus(SELF,…)
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (ellipsis))))
+    (expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (expression
+            (identifier))
+          (ellipsis))))))

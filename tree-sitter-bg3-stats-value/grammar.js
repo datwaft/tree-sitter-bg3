@@ -37,10 +37,14 @@ export default grammar({
     source_file: ($) => optional($.sequence),
 
     sequence: ($) => prec.right(seq(
-      $.expression,
-      repeat(seq(';', $.expression)),
+      $._sequence_element,
+      repeat(seq(';', $._sequence_element)),
       optional(';'),
     )),
+
+    _sequence_element: ($) => choice($.expression, $.ellipsis),
+
+    ellipsis: () => '…',
 
     expression: ($) => choice(
       $.if_expression,
@@ -90,8 +94,8 @@ export default grammar({
     argument_list: ($) => seq('(', optional($._expression_list), ')'),
 
     _expression_list: ($) => seq(
-      $.expression,
-      repeat(seq(',', $.expression)),
+      choice($.expression, $.ellipsis),
+      repeat(seq(',', choice($.expression, $.ellipsis))),
       optional(','),
     ),
 
