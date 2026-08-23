@@ -180,3 +180,65 @@ DealDamage(…);ApplyStatus(SELF,…)
           (expression
             (identifier))
           (ellipsis))))))
+
+==================
+Prefixed functor statements
+==================
+
+GROUND:DealDamage(MainMeleeWeapon,MainMeleeWeaponDamageType);AI_IGNORE:CAST:Kill();AOE:IF(not Dead()):DealDamage(1d4,Fire)
+
+---
+
+(source_file
+  (sequence
+    (prefixed_expression
+      (identifier)
+      (call_expression
+        (identifier)
+        (argument_list
+          (expression
+            (identifier))
+          (expression
+            (identifier)))))
+    (prefixed_expression
+      (identifier)
+      (identifier)
+      (call_expression
+        (identifier)
+        (argument_list)))
+    (prefixed_expression
+      (identifier)
+      (if_expression
+        (expression
+          (unary_expression
+            (expression
+              (call_expression
+                (identifier)
+                (argument_list)))))
+        (expression
+          (call_expression
+            (identifier)
+            (argument_list
+              (expression
+                (dice_literal))
+              (expression
+                (identifier)))))))))
+
+==================
+Resource expressions stay unprefixed
+==================
+
+ActionPoint:1;ActionPoint:2
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (resource_expression
+        (identifier)
+        (number)))
+    (expression
+      (resource_expression
+        (identifier)
+        (number)))))
