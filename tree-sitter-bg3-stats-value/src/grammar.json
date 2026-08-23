@@ -69,13 +69,46 @@
         },
         {
           "type": "SYMBOL",
-          "name": "prefixed_expression"
+          "name": "bracket_group"
         }
       ]
     },
     "ellipsis": {
       "type": "STRING",
       "value": "…"
+    },
+    "bracket_group": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "sequence"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
     },
     "expression": {
       "type": "CHOICE",
@@ -107,6 +140,10 @@
         {
           "type": "SYMBOL",
           "name": "parenthesized_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "prefixed_expression"
         },
         {
           "type": "SYMBOL",
