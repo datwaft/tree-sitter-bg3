@@ -14,6 +14,9 @@
   function: (member_expression
     property: (identifier) @function.method.call))
 
+(prefixed_expression
+  prefix: (identifier) @attribute)
+
 (member_expression
   object: (identifier) @variable.builtin
   property: (identifier) @property)

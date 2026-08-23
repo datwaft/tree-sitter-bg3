@@ -16,6 +16,11 @@ Version 0.5.0 accepts the Unicode ellipsis character in `bg3_stats_value` as a
 placeholder for elided content in sequence and argument positions. The
 placeholder highlights as a comment, and other expression positions still
 reject it.
+Version 0.5.1 parses functor execution prefixes in `bg3_stats_value`. A
+statement such as `GROUND:DealDamage(...)` parses as one prefixed expression
+with chained prefix support, the callee keeps the function highlight, and each
+prefix highlights as an attribute. Standalone resource expressions such as
+`ActionPoint:1` keep their existing tree.
 
 This repository contains four grammars:
 

@@ -42,7 +42,7 @@ export default grammar({
       optional(';'),
     )),
 
-    _sequence_element: ($) => choice($.expression, $.ellipsis),
+    _sequence_element: ($) => choice($.expression, $.ellipsis, $.prefixed_expression),
 
     ellipsis: () => '…',
 
@@ -89,6 +89,11 @@ export default grammar({
     call_expression: ($) => prec(PREC.CALL, seq(
       field('function', choice($.identifier, $.member_expression)),
       field('arguments', $.argument_list),
+    )),
+
+    prefixed_expression: ($) => prec.right(PREC.CALL, seq(
+      repeat1(prec(PREC.CALL, seq(field('prefix', $.identifier), ':'))),
+      field('expression', choice($.if_expression, $.call_expression)),
     )),
 
     argument_list: ($) => seq('(', optional($._expression_list), ')'),
