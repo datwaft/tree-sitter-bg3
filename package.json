@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-bg3",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "module",
   "description": "Tree-sitter grammars for Baldur's Gate 3 data, Thoth, and Osiris files",
   "repository": "github:datwaft/tree-sitter-bg3",

@@ -21,6 +21,11 @@ statement such as `GROUND:DealDamage(...)` parses as one prefixed expression
 with chained prefix support, the callee keeps the function highlight, and each
 prefix highlights as an attribute. Standalone resource expressions such as
 `ActionPoint:1` keep their existing tree.
+Version 0.5.2 accepts bracketed functor groups and allows execution prefixes
+in any expression position. A statement such as
+`CastOffhand[IF(cond):GROUND:DealDamage(...);...]` parses as one bracket
+group whose body is a full statement sequence, and the group name highlights
+as an attribute.
 
 This repository contains four grammars:
 

@@ -191,38 +191,41 @@ GROUND:DealDamage(MainMeleeWeapon,MainMeleeWeaponDamageType);AI_IGNORE:CAST:Kill
 
 (source_file
   (sequence
-    (prefixed_expression
-      (identifier)
-      (call_expression
+    (expression
+      (prefixed_expression
         (identifier)
-        (argument_list
-          (expression
-            (identifier))
-          (expression
-            (identifier)))))
-    (prefixed_expression
-      (identifier)
-      (identifier)
-      (call_expression
-        (identifier)
-        (argument_list)))
-    (prefixed_expression
-      (identifier)
-      (if_expression
-        (expression
-          (unary_expression
+        (call_expression
+          (identifier)
+          (argument_list
             (expression
-              (call_expression
-                (identifier)
-                (argument_list)))))
-        (expression
-          (call_expression
-            (identifier)
-            (argument_list
+              (identifier))
+            (expression
+              (identifier))))))
+    (expression
+      (prefixed_expression
+        (identifier)
+        (identifier)
+        (call_expression
+          (identifier)
+          (argument_list))))
+    (expression
+      (prefixed_expression
+        (identifier)
+        (if_expression
+          (expression
+            (unary_expression
               (expression
-                (dice_literal))
-              (expression
-                (identifier)))))))))
+                (call_expression
+                  (identifier)
+                  (argument_list)))))
+          (expression
+            (call_expression
+              (identifier)
+              (argument_list
+                (expression
+                  (dice_literal))
+                (expression
+                  (identifier))))))))))
 
 ==================
 Resource expressions stay unprefixed
@@ -242,3 +245,56 @@ ActionPoint:1;ActionPoint:2
       (resource_expression
         (identifier)
         (number)))))
+
+==================
+Bracketed functor groups
+==================
+
+Attack(AttackType.MeleeWeaponAttack);CastOffhand[IF(not HasStatus('X',context.Source)):GROUND:DealDamage(C,D);ExecuteWeaponFunctors(OffHand)]
+
+---
+
+(source_file
+  (sequence
+    (expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (expression
+            (member_expression
+              (identifier)
+              (identifier))))))
+    (bracket_group
+      (identifier)
+      (sequence
+        (expression
+          (if_expression
+            (expression
+              (unary_expression
+                (expression
+                  (call_expression
+                    (identifier)
+                    (argument_list
+                      (expression
+                        (string_literal
+                          (string_content)))
+                      (expression
+                        (member_expression
+                          (identifier)
+                          (identifier))))))))
+            (expression
+              (prefixed_expression
+                (identifier)
+                (call_expression
+                  (identifier)
+                  (argument_list
+                    (expression
+                      (identifier))
+                    (expression
+                      (identifier))))))))
+        (expression
+          (call_expression
+            (identifier)
+            (argument_list
+              (expression
+                (identifier)))))))))

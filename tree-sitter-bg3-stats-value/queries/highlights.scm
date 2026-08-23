@@ -17,6 +17,9 @@
 (prefixed_expression
   prefix: (identifier) @attribute)
 
+(bracket_group
+  name: (identifier) @attribute)
+
 (member_expression
   object: (identifier) @variable.builtin
   property: (identifier) @property)
@@ -51,6 +54,8 @@
   ")"
   "{"
   "}"
+  "["
+  "]"
   ","
   ";"
   ":"

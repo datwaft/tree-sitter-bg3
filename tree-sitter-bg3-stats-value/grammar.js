@@ -42,9 +42,16 @@ export default grammar({
       optional(';'),
     )),
 
-    _sequence_element: ($) => choice($.expression, $.ellipsis, $.prefixed_expression),
+    _sequence_element: ($) => choice($.expression, $.ellipsis, $.bracket_group),
 
     ellipsis: () => '…',
+
+    bracket_group: ($) => seq(
+      field('name', $.identifier),
+      '[',
+      optional($.sequence),
+      ']',
+    ),
 
     expression: ($) => choice(
       $.if_expression,
@@ -54,6 +61,7 @@ export default grammar({
       $.member_expression,
       $.resource_expression,
       $.parenthesized_expression,
+      $.prefixed_expression,
       $.list_literal,
       $.string_literal,
       $.uuid,
