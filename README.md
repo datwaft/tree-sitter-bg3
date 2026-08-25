@@ -26,6 +26,9 @@ in any expression position. A statement such as
 `CastOffhand[IF(cond):GROUND:DealDamage(...);...]` parses as one bracket
 group whose body is a full statement sequence, and the group name highlights
 as an attribute.
+Version 0.5.3 highlights every `LSTag` attribute, including `Type`, with the
+same groups as `Tooltip`, and highlights inline `<br>` tag names,
+self-closing slashes, and delimiters in literal and encoded forms.
 
 This repository contains four grammars:
 
