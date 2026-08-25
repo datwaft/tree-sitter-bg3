@@ -92,11 +92,7 @@ local function thoth_indentexpr()
         applied = true
       end
       local parent_in_error = node:parent() and node:parent():has_error()
-      if
-        node_captures["indent.begin"]
-        and (start_row ~= end_row or parent_in_error)
-        and start_row ~= lnum - 1
-      then
+      if node_captures["indent.begin"] and (start_row ~= end_row or parent_in_error) and start_row ~= lnum - 1 then
         indent = indent + vim.fn.shiftwidth()
         applied = true
       end
@@ -265,8 +261,8 @@ describe("BG3 Stats parser integration", function()
       end
     end
 
-    assert.equals(4, vim.tbl_count(concealed["<"]))
-    assert.equals(2, vim.tbl_count(concealed[">"]))
+    assert.equals(5, vim.tbl_count(concealed["<"]))
+    assert.equals(3, vim.tbl_count(concealed[">"]))
     for _, entity in pairs(concealed["<"]) do
       assert.equals("&lt;", entity)
     end
@@ -315,5 +311,104 @@ describe("BG3 Stats parser integration", function()
 
     vim.api.nvim_buf_set_lines(0, 3, 4, false, { "  <content>plain text</content>" })
     assert.is_nil(extmark_groups(3, 12)["@tag"])
+  end)
+
+  it("highlights Type attributes and inline br markup like Tooltip", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(localization_example))
+
+    local function extmark_groups(row, column)
+      local inspected = vim.inspect_pos(0, row, column, { treesitter = false, syntax = false, extmarks = true })
+      local groups = {}
+      for _, extmark in ipairs(inspected.extmarks) do
+        if extmark.opts.hl_group then groups[extmark.opts.hl_group] = true end
+      end
+      return groups
+    end
+
+    -- Row 4 carries literal markup: Type, Tooltip, <br>, and <br/>.
+    local typed = vim.api.nvim_buf_get_lines(0, 4, 5, false)[1]
+    assert.is_truthy(typed:find('<LSTag Type="ActionResource"', 1, true))
+    assert.is_true(extmark_groups(4, typed:find("Type", 1, true) - 1)["@tag.attribute"])
+    assert.is_true(extmark_groups(4, typed:find('"ActionResource"', 1, true) - 1)["@string.special"])
+    assert.is_true(extmark_groups(4, typed:find("Tooltip", 1, true) - 1)["@tag.attribute"])
+    assert.is_true(extmark_groups(4, typed:find('"BonusActionPoint"', 1, true) - 1)["@string.special"])
+
+    -- Row 5 carries the bare literal form through a scratch-free case; here
+    -- the fixture keeps XML well-formed with a self-closing tag.
+    local closing = typed:find("<br/>", 1, true)
+    assert.is_true(extmark_groups(4, closing - 1)["@punctuation.bracket"])
+    assert.is_true(extmark_groups(4, closing + 1)["@tag"])
+    assert.is_true(extmark_groups(4, closing + 2)["@tag"])
+    assert.is_true(extmark_groups(4, closing + 3)["@punctuation.bracket"])
+
+    -- Row 5 carries encoded inline markup.
+    local encoded = vim.api.nvim_buf_get_lines(0, 5, 6, false)[1]
+    local entity = assert(encoded:find("&lt;br&gt;", 1, true))
+    assert.is_true(extmark_groups(5, entity - 1)["@punctuation.bracket"])
+    assert.is_true(extmark_groups(5, entity + 3)["@tag"])
+    assert.is_true(extmark_groups(5, entity + 8)["@punctuation.bracket"])
+  end)
+
+  it("highlights bare br tags in scratch buffers without XML well-formedness", function()
+    local buffer = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { "A<br>B and &lt;br/&gt; C" })
+    vim.api.nvim_set_current_buf(buffer)
+    vim.bo[buffer].filetype = "bg3_localization"
+    vim.wait(50)
+
+    local function group_at(row, column)
+      local inspected = vim.inspect_pos(0, row, column, { treesitter = false, syntax = false, extmarks = true })
+      for _, extmark in ipairs(inspected.extmarks) do
+        if extmark.opts.hl_group then return extmark.opts.hl_group end
+      end
+      return nil
+    end
+
+    local line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
+    local literal_br = line:find("<br>", 1, true)
+    assert.equals("@punctuation.bracket", group_at(0, literal_br - 1))
+    assert.equals("@tag", group_at(0, literal_br))
+    assert.equals("@punctuation.bracket", group_at(0, literal_br + 2))
+
+    local encoded_self_closing = assert(line:find("&lt;br/&gt;", 1, true))
+    assert.equals("@punctuation.bracket", group_at(0, encoded_self_closing - 1))
+    assert.equals("@tag", group_at(0, encoded_self_closing + 3))
+    assert.equals("@tag", group_at(0, encoded_self_closing + 4))
+    assert.equals("@tag", group_at(0, encoded_self_closing + 5))
+    assert.equals("@punctuation.bracket", group_at(0, encoded_self_closing + 6))
+  end)
+end)
+
+describe("BG3 Osiris highlights query", function()
+  it("captures stable editor groups across goal structure", function()
+    vim.cmd("edit " .. vim.fn.fnameescape(osiris_example))
+    local parser = vim.treesitter.get_parser(0, "bg3_osiris")
+    local tree = assert(parser:parse(true)[1], "expected an Osiris syntax tree")
+    local query = assert(vim.treesitter.query.get("bg3_osiris", "highlights"))
+
+    local captured = {}
+    for id, node in query:iter_captures(tree:root(), 0) do
+      local name = query.captures[id]
+      captured[name] = captured[name] or {}
+      table.insert(captured[name], vim.treesitter.get_node_text(node, 0))
+    end
+
+    local function contains(group, text)
+      for _, value in ipairs(captured[group] or {}) do
+        if value == text then return true end
+      end
+      return false
+    end
+
+    assert.is_true(contains("keyword", "INITSECTION"))
+    assert.is_true(contains("keyword", "EXITSECTION"))
+    assert.is_true(contains("keyword.control", "IF"))
+    assert.is_true(contains("keyword.control", "THEN"))
+    assert.is_true(contains("type", "CHARACTER"))
+    assert.is_true(contains("function", "QRY_Example_IsReady"))
+    assert.is_true(contains("function.call", "ExampleEvent"))
+    assert.is_true(contains("variable.special", "DB_Example_Seen"))
+    assert.is_true(contains("string", '"Example_Parent"'))
+    assert.is_true(contains("number", "1"))
   end)
 end)
