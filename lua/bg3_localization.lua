@@ -26,18 +26,43 @@ local function next_close_delimiter(line, offset)
   if literal then return literal, 1 end
 end
 
-local function highlight_tooltip(buffer, row, line, start_column, end_column)
+-- Highlights every quoted attribute inside one open tag region. Any
+-- attribute name receives the attribute group so `Type` behaves exactly like
+-- `Tooltip`.
+local function highlight_attributes(buffer, row, line, start_column, end_column)
   local offset = start_column
   while offset <= end_column do
-    local _, quote_end, attribute_start, quote_start, quote = line:find("()Tooltip%s*=%s*()([\"'])", offset)
-    if not attribute_start or quote_end > end_column then return end
-
-    local value_end = line:find(quote, quote_end + 1, true)
+    local _, value_end, name_start, name, quote_start, quote = line:find("()([%a_][%w%-%.]*)%s*=%s*()([\"'])", offset)
+    if not name_start or quote_start > end_column then return end
     if not value_end or value_end > end_column then return end
-    highlight(buffer, row, attribute_start - 1, attribute_start + 6, "@tag.attribute")
+
+    highlight(buffer, row, name_start - 1, name_start - 1 + #name, "@tag.attribute")
     highlight(buffer, row, quote_start - 1, value_end, "@string.special")
     offset = value_end + 1
   end
+end
+-- Highlights one inline tag plus its delimiters and returns the offset after
+-- the closing delimiter. A self-closing slash stays part of the name span.
+-- Returns nil when the tag is unterminated so the caller stops this line.
+local function highlight_inline_tag(buffer, row, line, open_start, open_length, name)
+  local name_start = open_start + open_length
+  local closing = line:sub(name_start, name_start) == "/"
+  if closing then name_start = name_start + 1 end
+  local name_end = name_start + #name - 1
+  local following = line:sub(name_end + 1, name_end + 1)
+  if not following:match("[%s>/;&]") then return nil end
+
+  local close_start, close_length = next_close_delimiter(line, name_end + 1)
+  if not close_start then return nil end
+
+  highlight(buffer, row, open_start - 1, name_start - 1, "@punctuation.bracket")
+  -- A self-closing slash (and its encoded terminator) joins the name span.
+  local trailing = line:sub(name_end + 1, close_start - 1)
+  local exclusive_end = trailing:match("^[%s/;]*$") and close_start - 1 or name_end
+  highlight(buffer, row, name_start - 1, exclusive_end, "@tag")
+  highlight(buffer, row, close_start - 1, close_start + close_length - 1, "@punctuation.bracket")
+  if not closing then highlight_attributes(buffer, row, line, name_end + 1, close_start - 1) end
+  return close_start + close_length
 end
 
 local function highlight_line(buffer, row, line)
@@ -47,22 +72,27 @@ local function highlight_line(buffer, row, line)
     if not open_start then return end
 
     local name_start = open_start + open_length
-    local closing = line:sub(name_start, name_start) == "/"
-    if closing then name_start = name_start + 1 end
-    local name_end = name_start + 4
-    local following = line:sub(name_end + 1, name_end + 1)
-    if line:sub(name_start, name_end) ~= "LSTag" or not following:match("[%s>/&]") then
-      offset = open_start + open_length
-    else
+    local name = line:match("^[%a_]+", name_start)
+    local next_offset
+    if name == "LSTag" and line:sub(name_start + #name):match("^[%s>/;&]") then
+      local name_end = name_start + #name - 1
       local close_start, close_length = next_close_delimiter(line, name_end + 1)
       if not close_start then return end
 
       highlight(buffer, row, open_start - 1, name_start - 1, "@punctuation.bracket")
       highlight(buffer, row, name_start - 1, name_end, "@tag")
       highlight(buffer, row, close_start - 1, close_start + close_length - 1, "@punctuation.bracket")
-      if not closing then highlight_tooltip(buffer, row, line, name_end + 1, close_start - 1) end
-      offset = close_start + close_length
+      if line:sub(name_start, name_start) ~= "/" then
+        highlight_attributes(buffer, row, line, name_end + 1, close_start - 1)
+      end
+      next_offset = close_start + close_length
+    elseif name == "br" then
+      next_offset = highlight_inline_tag(buffer, row, line, open_start, open_length, name)
+      if not next_offset then return end
+    else
+      next_offset = open_start + open_length
     end
+    offset = math.max(next_offset, offset + 1)
   end
 end
 

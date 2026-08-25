@@ -2,5 +2,7 @@
 <contentList>
   <content contentuid="h00000000000000000000000000000001" version="1">Escaped: &lt;LSTag Tooltip="Escaped"&gt;value&lt;/LSTag&gt;. Literal close: &lt;LSTag Tooltip="Literal">value&lt;/LSTag>. Comparison: 3 > 2.</content>
   <content contentuid="h00000000000000000000000000000002" version="1">Toolkit: <LSTag Tooltip="ArmourClass"><em>Armour</em></LSTag>.</content>
+  <content contentuid="h00000000000000000000000000000003" version="1"><LSTag Type="ActionResource" Tooltip="BonusActionPoint">Bonus Action</LSTag><br/>Split.</content>
+  <content contentuid="h00000000000000000000000000000004" version="1">Encoded &lt;br&gt; break.</content>
   <metadata>&lt;Outside&gt;</metadata>
 </contentList>
