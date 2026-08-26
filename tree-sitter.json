@@ -40,7 +40,7 @@
     }
   ],
   "metadata": {
-    "version": "0.3.0",
+    "version": "0.6.0",
     "license": "MIT",
     "description": "Tree-sitter grammars for Baldur's Gate 3 data, Thoth, and Osiris files",
     "links": {

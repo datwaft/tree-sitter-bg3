@@ -29,6 +29,8 @@ as an attribute.
 Version 0.5.3 highlights every `LSTag` attribute, including `Type`, with the
 same groups as `Tooltip`, and highlights inline `<br>` tag names,
 self-closing slashes, and delimiters in literal and encoded forms.
+Version 0.6.0 parses standalone Osiris callable signatures, including `[in]`,
+`[out]`, and `[inout]` parameter directions, types, and local names.
 
 This repository contains four grammars:
 
