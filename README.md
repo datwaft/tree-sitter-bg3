@@ -188,8 +188,11 @@ grammar remains under its original MIT license in
 
 The Osiris grammar parses raw goal metadata, INIT, KB, and EXIT sections,
 `IF`, `PROC`, and `QRY` rules, typed values, comparisons, facts, actions, and
-parent-goal edges. It provides syntax structure only. It does not compile or
-execute a Story, validate engine APIs, or infer Osiris types.
+parent-goal edges. It also parses standalone callable signatures with
+`[in]`, `[out]`, and `[inout]` parameter directions. This supports syntax
+highlighting for signatures shown by `bg3-ls` in hover documentation. It
+provides syntax structure only. It does not compile or execute a Story,
+validate engine APIs, or infer Osiris types.
 
 ## License
 

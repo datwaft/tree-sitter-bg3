@@ -411,4 +411,44 @@ describe("BG3 Osiris highlights query", function()
     assert.is_true(contains("string", '"Example_Parent"'))
     assert.is_true(contains("number", "1"))
   end)
+
+  it("highlights standalone callable signatures", function()
+    local buffer = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_set_current_buf(buffer)
+    vim.bo[buffer].filetype = "bg3_osiris"
+    vim.api.nvim_buf_set_lines(buffer, 0, -1, false, {
+      "Example([in] INTEGER _Input, [out] REAL _Output, [inout] STRING _Value)",
+    })
+
+    local parser = vim.treesitter.get_parser(buffer, "bg3_osiris")
+    local tree = assert(parser:parse(true)[1], "expected a signature syntax tree")
+    assert.is_false(tree:root():has_error())
+
+    local query = assert(vim.treesitter.query.get("bg3_osiris", "highlights"))
+    local captured = {}
+    for id, node in query:iter_captures(tree:root(), buffer) do
+      local name = query.captures[id]
+      captured[name] = captured[name] or {}
+      table.insert(captured[name], vim.treesitter.get_node_text(node, buffer))
+    end
+
+    local function contains(group, text)
+      for _, value in ipairs(captured[group] or {}) do
+        if value == text then return true end
+      end
+      return false
+    end
+
+    assert.is_true(contains("keyword.modifier", "[in]"))
+    assert.is_true(contains("keyword.modifier", "[out]"))
+    assert.is_true(contains("keyword.modifier", "[inout]"))
+    assert.is_true(contains("type", "INTEGER"))
+    assert.is_true(contains("type", "REAL"))
+    assert.is_true(contains("type", "STRING"))
+    assert.is_true(contains("variable", "_Input"))
+    assert.is_true(contains("variable", "_Output"))
+    assert.is_true(contains("variable", "_Value"))
+
+    vim.api.nvim_buf_delete(buffer, { force = true })
+  end)
 end)
