@@ -34,12 +34,40 @@ export default grammar({
 
   rules: {
     source_file: ($) => seq(
-      $.version_declaration,
-      $.subgoal_combiner_declaration,
-      $.init_section,
-      $.kb_section,
-      $.exit_section,
-      repeat($.parent_target_edge),
+      choice(
+        seq(
+          $.version_declaration,
+          $.subgoal_combiner_declaration,
+          $.init_section,
+          $.kb_section,
+          $.exit_section,
+          repeat($.parent_target_edge),
+        ),
+        $.callable_signature,
+      ),
+    ),
+
+    callable_signature: ($) => seq(
+      field('name', $.identifier),
+      field('arguments', $.signature_argument_list),
+    ),
+
+    signature_argument_list: ($) => seq(
+      '(',
+      commaSep($.signature_parameter),
+      ')',
+    ),
+
+    signature_parameter: ($) => seq(
+      field('direction', $.parameter_direction),
+      field('type', $.identifier),
+      field('name', $.local_variable),
+    ),
+
+    parameter_direction: () => choice(
+      '[in]',
+      '[out]',
+      '[inout]',
     ),
 
     version_declaration: ($) => seq(

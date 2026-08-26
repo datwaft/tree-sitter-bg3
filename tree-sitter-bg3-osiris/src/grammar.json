@@ -7,31 +7,158 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "version_declaration"
-        },
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "version_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "subgoal_combiner_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "init_section"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "kb_section"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "exit_section"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "parent_target_edge"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "callable_signature"
+            }
+          ]
+        }
+      ]
+    },
+    "callable_signature": {
+      "type": "SEQ",
+      "members": [
         {
-          "type": "SYMBOL",
-          "name": "subgoal_combiner_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "init_section"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "kb_section"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "exit_section"
-        },
-        {
-          "type": "REPEAT",
+          "type": "FIELD",
+          "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "parent_target_edge"
+            "name": "identifier"
           }
+        },
+        {
+          "type": "FIELD",
+          "name": "arguments",
+          "content": {
+            "type": "SYMBOL",
+            "name": "signature_argument_list"
+          }
+        }
+      ]
+    },
+    "signature_argument_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "signature_parameter"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "signature_parameter"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "signature_parameter": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "direction",
+          "content": {
+            "type": "SYMBOL",
+            "name": "parameter_direction"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "local_variable"
+          }
+        }
+      ]
+    },
+    "parameter_direction": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "[in]"
+        },
+        {
+          "type": "STRING",
+          "value": "[out]"
+        },
+        {
+          "type": "STRING",
+          "value": "[inout]"
         }
       ]
     },

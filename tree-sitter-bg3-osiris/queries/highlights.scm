@@ -32,6 +32,11 @@
 (type_cast
   type: (identifier) @type)
 
+(signature_parameter
+  direction: (parameter_direction) @keyword.modifier
+  type: (identifier) @type
+  name: (local_variable) @variable)
+
 (rule
   kind: ["PROC" "QRY"]
   head: (call_expression

@@ -81,6 +81,32 @@
     }
   },
   {
+    "type": "callable_signature",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "signature_argument_list",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "comparison_expression",
     "named": true,
     "fields": {
@@ -247,6 +273,11 @@
     }
   },
   {
+    "type": "parameter_direction",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "parent_target_edge",
     "named": true,
     "fields": {
@@ -321,6 +352,57 @@
     }
   },
   {
+    "type": "signature_argument_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "signature_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "signature_parameter",
+    "named": true,
+    "fields": {
+      "direction": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameter_direction",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "local_variable",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -329,6 +411,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "callable_signature",
+          "named": true
+        },
         {
           "type": "exit_section",
           "named": true
@@ -587,6 +673,18 @@
   },
   {
     "type": "Version",
+    "named": false
+  },
+  {
+    "type": "[in]",
+    "named": false
+  },
+  {
+    "type": "[inout]",
+    "named": false
+  },
+  {
+    "type": "[out]",
     "named": false
   },
   {

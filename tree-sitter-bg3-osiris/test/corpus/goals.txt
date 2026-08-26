@@ -172,6 +172,70 @@ ParentTargetEdge "Example_OtherParent"
       (string_content))))
 
 ==================
+Standalone callable signature
+==================
+
+UsingSpell(
+    [in] GUIDSTRING _Caster,
+    [in] STRING _Spell,
+    [in] STRING _SpellType,
+    [in] STRING _SpellElement,
+    [in] INTEGER _StoryActionID
+)
+
+---
+
+(source_file
+  (callable_signature
+    (identifier)
+    (signature_argument_list
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable))
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable))
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable))
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable))
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable)))))
+
+==================
+All callable parameter directions
+==================
+
+Example([in] INTEGER _Input, [out] REAL _Output, [inout] STRING _Value)
+
+---
+
+(source_file
+  (callable_signature
+    (identifier)
+    (signature_argument_list
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable))
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable))
+      (signature_parameter
+        (parameter_direction)
+        (identifier)
+        (local_variable)))))
+
+==================
 Empty sections and comments
 ==================
 
