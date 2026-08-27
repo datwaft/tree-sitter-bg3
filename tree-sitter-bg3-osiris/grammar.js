@@ -131,7 +131,7 @@ export default grammar({
         field('condition', $.condition),
       )),
       'THEN',
-      repeat(field('action', $._action)),
+      repeat1(field('action', $._action)),
     ),
 
     condition: ($) => seq(

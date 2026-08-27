@@ -299,7 +299,7 @@
     "fields": {
       "action": {
         "multiple": true,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "action_statement",

@@ -453,7 +453,7 @@
           "value": "THEN"
         },
         {
-          "type": "REPEAT",
+          "type": "REPEAT1",
           "content": {
             "type": "FIELD",
             "name": "action",
