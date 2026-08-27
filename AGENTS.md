@@ -282,6 +282,20 @@ unresolved conflicts, or known acceptance failures. When the task grants merge
 authority, use a squash merge and delete the remote bookmark. Otherwise, leave
 the pull request ready for review.
 
+When the user explicitly authorizes immediate merging after local verification,
+the pull request may be merged without waiting for hosted CI when the applicable
+local checks pass. For this repository, run `npm ci`, `make test`,
+`cargo fmt --all --check`, `cargo test --workspace --locked`,
+`cargo clippy --workspace --all-targets --locked -- -D warnings`,
+`cargo package --allow-dirty --locked`, and `npm pack --dry-run`, then inspect
+the complete diff. For workflow changes, also run
+`./test/release-workflow.sh` and `actionlint`. Hosted CI remains required for
+workflow changes,
+dependency or lockfile changes, release or version changes, security or
+permissions changes, generated parser artifacts, and platform-sensitive
+Neovim or runtime changes. The release workflow and this policy change are
+workflow changes, so this pull request must wait for hosted CI.
+
 After a merge:
 
 ```sh

@@ -25,6 +25,6 @@
     "test": "make test"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.26.1"
+    "tree-sitter-cli": "0.26.11"
   }
 }
