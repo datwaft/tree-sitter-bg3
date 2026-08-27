@@ -172,6 +172,144 @@ ParentTargetEdge "Example_OtherParent"
       (string_content))))
 
 ==================
+Dotted enum constants
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+
+IF
+ExampleEvent()
+AND
+HasDamageType(DEATHTYPE.Physical)
+THEN
+RecordDamageType(DEATHTYPE.Physical);
+
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(source_file
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (kb_section
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list))
+      (condition
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_constant
+              (enum_constant)))))
+      (action_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_constant
+              (enum_constant)))))))
+  (exit_section))
+
+==================
+Reject incomplete enum constants
+==================
+
+TYPE.
+
+---
+
+(ERROR
+  (identifier))
+
+==================
+Reject enum constants without a type
+==================
+
+.VALUE
+
+---
+
+(ERROR
+  (ERROR)
+  (identifier))
+
+==================
+Reject enum constants with extra segments
+==================
+
+TYPE.VALUE.MORE
+
+---
+
+(ERROR
+  (ERROR
+    (identifier)
+    (identifier))
+  (identifier))
+
+==================
+Whitespace separates enum constant segments
+==================
+
+TYPE . VALUE
+
+---
+
+(ERROR
+  (ERROR
+    (identifier))
+  (identifier))
+
+==================
+Casts and member calls remain distinct
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+IF
+ExampleEvent((CHARACTER)_Actor)
+THEN
+(CHARACTER)_Actor.ApplyExample(_Value);
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(source_file
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (kb_section
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list
+          (typed_variable
+            (type_cast
+              (identifier))
+            (local_variable))))
+      (action_statement
+        (call_expression
+          (typed_variable
+            (type_cast
+              (identifier))
+            (local_variable))
+          (identifier)
+          (argument_list
+            (typed_variable
+              (local_variable)))))))
+  (exit_section))
+
+==================
 Standalone callable signature
 ==================
 

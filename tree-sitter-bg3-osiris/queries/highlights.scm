@@ -32,6 +32,8 @@
 (type_cast
   type: (identifier) @type)
 
+(enum_constant) @constant
+
 (signature_parameter
   direction: (parameter_direction) @keyword.modifier
   type: (identifier) @type
