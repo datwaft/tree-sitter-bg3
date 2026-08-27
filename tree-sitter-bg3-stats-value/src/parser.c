@@ -679,7 +679,9 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       if (lookahead == '\\') ADVANCE(62);
       if (('\t' <= lookahead && lookahead <= '\r') ||
           lookahead == ' ') ADVANCE(92);
-      if (lookahead != 0) ADVANCE(93);
+      if (lookahead != 0 &&
+          lookahead != 0x17f &&
+          lookahead != 0x212a) ADVANCE(93);
       END_STATE();
     case 2:
       if (lookahead == '-') ADVANCE(44);
@@ -1019,7 +1021,9 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 62:
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(93);
+          lookahead != '\n' &&
+          lookahead != 0x17f &&
+          lookahead != 0x212a) ADVANCE(93);
       END_STATE();
     case 63:
       if (eof) ADVANCE(65);
@@ -1163,13 +1167,17 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       if (('\t' <= lookahead && lookahead <= '\r') ||
           lookahead == ' ') ADVANCE(92);
       if (lookahead != 0 &&
-          lookahead != '\'') ADVANCE(93);
+          lookahead != '\'' &&
+          lookahead != 0x17f &&
+          lookahead != 0x212a) ADVANCE(93);
       END_STATE();
     case 93:
       ACCEPT_TOKEN(sym_string_content);
       if (lookahead == '\\') ADVANCE(62);
       if (lookahead != 0 &&
-          lookahead != '\'') ADVANCE(93);
+          lookahead != '\'' &&
+          lookahead != 0x17f &&
+          lookahead != 0x212a) ADVANCE(93);
       END_STATE();
     case 94:
       ACCEPT_TOKEN(sym_uuid);
@@ -3704,7 +3712,7 @@ TS_PUBLIC const TSLanguage *tree_sitter_bg3_stats_value(void) {
     .max_reserved_word_set_size = 0,
     .metadata = {
       .major_version = 0,
-      .minor_version = 3,
+      .minor_version = 6,
       .patch_version = 0,
     },
   };

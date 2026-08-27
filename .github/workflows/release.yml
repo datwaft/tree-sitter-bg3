@@ -1,0 +1,163 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  validate-tag:
+    name: Validate release tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag_commit: ${{ steps.validate.outputs.tag_commit }}
+    steps:
+      - name: Check out the tagged commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag ancestry and version metadata
+        id: validate
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Tag must match vX.Y.Z without leading zeroes: $TAG" >&2
+            exit 1
+          fi
+
+          tag_type="$(git cat-file -t "refs/tags/$TAG")"
+          if [[ "$tag_type" != tag ]]; then
+            echo "Release tags must be annotated tags: $TAG" >&2
+            exit 1
+          fi
+
+          tag_commit="$(git rev-parse --verify "refs/tags/$TAG^{commit}")"
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor "$tag_commit" origin/main
+
+          if [[ "$tag_commit" != "$GITHUB_SHA" ]]; then
+            echo "Tag does not resolve to the event commit" >&2
+            exit 1
+          fi
+
+          expected="${TAG#v}"
+          cargo_toml_version="$(awk '
+            /^\[package\]$/ { in_package = 1; next }
+            /^\[/ && in_package { exit }
+            in_package && /^version = / {
+              value = $0
+              sub(/^[^\"]*\"/, "", value)
+              sub(/\".*$/, "", value)
+              print value
+              exit
+            }
+          ' Cargo.toml)"
+          cargo_lock_version="$(awk '
+            /^\[\[package\]\]$/ { in_package = 0 }
+            /^name = "tree-sitter-bg3"$/ { in_package = 1; next }
+            in_package && /^version = / {
+              value = $0
+              sub(/^[^\"]*\"/, "", value)
+              sub(/\".*$/, "", value)
+              print value
+              exit
+            }
+          ' Cargo.lock)"
+
+          versions=(
+            "Cargo.toml=$cargo_toml_version"
+            "Cargo.lock=$cargo_lock_version"
+            "package.json=$(jq -er '.version' package.json)"
+            "package-lock.json root=$(jq -er '.version' package-lock.json)"
+            "package-lock.json package=$(jq -er '.packages[\"\"].version' package-lock.json)"
+            "tree-sitter.json=$(jq -er '.metadata.version' tree-sitter.json)"
+          )
+          for item in "${versions[@]}"; do
+            value="${item#*=}"
+            if [[ "$value" != "$expected" ]]; then
+              echo "Version mismatch: $item (expected $expected)" >&2
+              exit 1
+            fi
+          done
+
+          echo "tag_commit=$tag_commit" >> "$GITHUB_OUTPUT"
+
+  verify:
+    name: Verify tagged release
+    needs: validate-tag
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    name: Publish GitHub release
+    needs:
+      - validate-tag
+      - verify
+    if: ${{ needs.verify.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the tagged commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+
+      - name: Create GitHub release with generated notes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          TAG_COMMIT: ${{ needs.validate-tag.outputs.tag_commit }}
+        run: |
+          set -euo pipefail
+
+          remote_ref_type="$(gh api \
+            "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" \
+            --jq '.object.type')"
+          remote_ref_sha="$(gh api \
+            "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" \
+            --jq '.object.sha')"
+          if [[ "$remote_ref_type" != tag ]]; then
+            echo "The remote release tag is not annotated: $TAG" >&2
+            exit 1
+          fi
+          remote_tag_commit="$(gh api \
+            "repos/$GITHUB_REPOSITORY/git/tags/$remote_ref_sha" \
+            --jq '.object.sha')"
+          if [[ "$remote_tag_commit" != "$TAG_COMMIT" ]]; then
+            echo "The remote release tag does not resolve to the verified commit" >&2
+            exit 1
+          fi
+
+          source scripts/validate-github-release.sh
+
+          if release_json="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" 2>/dev/null)"; then
+            validate_github_release "$release_json"
+            echo "GitHub release $TAG already exists and matches the verified tag"
+            exit 0
+          fi
+
+          if gh release create "$TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --generate-notes \
+              --title "$TAG"; then
+            exit 0
+          fi
+
+          release_json="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG")"
+          validate_github_release "$release_json"
