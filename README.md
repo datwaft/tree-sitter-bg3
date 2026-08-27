@@ -193,8 +193,11 @@ The Osiris grammar parses raw goal metadata, INIT, KB, and EXIT sections,
 parent-goal edges. It also parses standalone callable signatures with
 `[in]`, `[out]`, and `[inout]` parameter directions. This supports syntax
 highlighting for signatures shown by `bg3-ls` in hover documentation. It
-provides syntax structure only. It does not compile or execute a Story,
-validate engine APIs, or infer Osiris types.
+exposes complete goals as `goal_file` nodes and standalone signatures as
+`callable_signature_file` nodes below `source_file`; dotted enum constants are
+represented as `enum_constant` nodes. It provides syntax structure only. It
+does not compile or execute a Story, validate engine APIs, or infer Osiris
+types.
 
 ## License
 

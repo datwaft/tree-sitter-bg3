@@ -46,130 +46,131 @@ ParentTargetEdge "Example_OtherParent"
 ---
 
 (source_file
-  (version_declaration
-    (integer))
-  (subgoal_combiner_declaration)
-  (init_section
-    (fact_statement
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_constant
-            (integer))))))
-  (kb_section
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_variable
-            (type_cast
-              (identifier))
-            (local_variable))
-          (typed_variable
-            (anonymous_variable))
-          (typed_constant
-            (integer))
-          (typed_constant
-            (type_cast
-              (identifier))
-            (integer))
-          (typed_constant
-            (real))
-          (typed_constant
-            (string_literal
-              (string_content)))
-          (typed_constant
-            (string_literal
-              (string_content)))
-          (typed_constant
-            (guid_literal))
-          (typed_constant
-            (guid_literal))))
-      (condition
-        (call_expression
-          (identifier)
-          (argument_list
-            (typed_variable
-              (local_variable)))))
-      (condition
-        (comparison_expression
-          (typed_variable
-            (local_variable))
-          (comparison_operator)
-          (typed_constant
-            (integer))))
-      (condition
-        (comparison_expression
-          (typed_variable
-            (local_variable))
-          (comparison_operator)
-          (typed_constant
-            (integer))))
-      (action_statement
-        (call_expression
-          (identifier)
-          (argument_list
-            (typed_variable
-              (local_variable)))))
-      (action_statement
-        (call_expression
-          (identifier)
-          (argument_list
-            (typed_variable
-              (local_variable)))))
-      (goal_completed_statement))
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_variable
-            (type_cast
-              (identifier))
-            (local_variable))))
-      (action_statement
-        (call_expression
-          (typed_variable
-            (type_cast
-              (identifier))
-            (local_variable))
-          (identifier)
-          (argument_list
-            (typed_variable
-              (local_variable))))))
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_variable
-            (type_cast
-              (identifier))
-            (local_variable))))
-      (condition
-        (call_expression
-          (identifier)
-          (argument_list
-            (typed_variable
-              (anonymous_variable)))))
-      (action_statement
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section
+      (fact_statement
         (call_expression
           (identifier)
           (argument_list
             (typed_constant
-              (integer)))))))
-  (exit_section
-    (fact_statement
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_constant
-            (integer)))))
-    (goal_completed_statement))
-  (parent_target_edge
-    (string_literal
-      (string_content)))
-  (parent_target_edge
-    (string_literal
-      (string_content))))
+              (integer))))))
+    (kb_section
+      (rule
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (type_cast
+                (identifier))
+              (local_variable))
+            (typed_variable
+              (anonymous_variable))
+            (typed_constant
+              (integer))
+            (typed_constant
+              (type_cast
+                (identifier))
+              (integer))
+            (typed_constant
+              (real))
+            (typed_constant
+              (string_literal
+                (string_content)))
+            (typed_constant
+              (string_literal
+                (string_content)))
+            (typed_constant
+              (guid_literal))
+            (typed_constant
+              (guid_literal))))
+        (condition
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_variable
+                (local_variable)))))
+        (condition
+          (comparison_expression
+            (typed_variable
+              (local_variable))
+            (comparison_operator)
+            (typed_constant
+              (integer))))
+        (condition
+          (comparison_expression
+            (typed_variable
+              (local_variable))
+            (comparison_operator)
+            (typed_constant
+              (integer))))
+        (action_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_variable
+                (local_variable)))))
+        (action_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_variable
+                (local_variable)))))
+        (goal_completed_statement))
+      (rule
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (type_cast
+                (identifier))
+              (local_variable))))
+        (action_statement
+          (call_expression
+            (typed_variable
+              (type_cast
+                (identifier))
+              (local_variable))
+            (identifier)
+            (argument_list
+              (typed_variable
+                (local_variable))))))
+      (rule
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_variable
+              (type_cast
+                (identifier))
+              (local_variable))))
+        (condition
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_variable
+                (anonymous_variable)))))
+        (action_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_constant
+                (integer)))))))
+    (exit_section
+      (fact_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (typed_constant
+              (integer)))))
+      (goal_completed_statement))
+    (parent_target_edge
+      (string_literal
+        (string_content)))
+    (parent_target_edge
+      (string_literal
+        (string_content)))))
 
 ==================
 Dotted enum constants
@@ -193,28 +194,29 @@ ENDEXITSECTION
 ---
 
 (source_file
-  (version_declaration
-    (integer))
-  (subgoal_combiner_declaration)
-  (init_section)
-  (kb_section
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list))
-      (condition
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (kb_section
+      (rule
         (call_expression
           (identifier)
-          (argument_list
-            (typed_constant
-              (enum_constant)))))
-      (action_statement
-        (call_expression
-          (identifier)
-          (argument_list
-            (typed_constant
-              (enum_constant)))))))
-  (exit_section))
+          (argument_list))
+        (condition
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_constant
+                (enum_constant)))))
+        (action_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_constant
+                (enum_constant)))))))
+    (exit_section)))
 
 ==================
 Reject incomplete enum constants
@@ -284,30 +286,31 @@ ENDEXITSECTION
 ---
 
 (source_file
-  (version_declaration
-    (integer))
-  (subgoal_combiner_declaration)
-  (init_section)
-  (kb_section
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_variable
-            (type_cast
-              (identifier))
-            (local_variable))))
-      (action_statement
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (kb_section
+      (rule
         (call_expression
-          (typed_variable
-            (type_cast
-              (identifier))
-            (local_variable))
           (identifier)
           (argument_list
             (typed_variable
-              (local_variable)))))))
-  (exit_section))
+              (type_cast
+                (identifier))
+              (local_variable))))
+        (action_statement
+          (call_expression
+            (typed_variable
+              (type_cast
+                (identifier))
+              (local_variable))
+            (identifier)
+            (argument_list
+              (typed_variable
+                (local_variable)))))))
+    (exit_section)))
 
 ==================
 Standalone callable signature
@@ -324,29 +327,30 @@ UsingSpell(
 ---
 
 (source_file
-  (callable_signature
-    (identifier)
-    (signature_argument_list
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable))
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable))
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable))
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable))
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable)))))
+  (callable_signature_file
+    (callable_signature
+      (identifier)
+      (signature_argument_list
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))))))
 
 ==================
 All callable parameter directions
@@ -357,21 +361,22 @@ Example([in] INTEGER _Input, [out] REAL _Output, [inout] STRING _Value)
 ---
 
 (source_file
-  (callable_signature
-    (identifier)
-    (signature_argument_list
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable))
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable))
-      (signature_parameter
-        (parameter_direction)
-        (identifier)
-        (local_variable)))))
+  (callable_signature_file
+    (callable_signature
+      (identifier)
+      (signature_argument_list
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))
+        (signature_parameter
+          (parameter_direction)
+          (identifier)
+          (local_variable))))))
 
 ==================
 Empty sections and comments
@@ -390,13 +395,14 @@ ENDEXITSECTION // A line comment can end at EOF.
 
 (source_file
   (comment)
-  (version_declaration
-    (integer))
-  (subgoal_combiner_declaration)
-  (init_section)
-  (comment)
-  (kb_section)
-  (exit_section)
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (comment)
+    (kb_section)
+    (exit_section))
   (comment))
 
 ==================
@@ -417,25 +423,26 @@ ENDEXITSECTION
 ---
 
 (source_file
-  (version_declaration
-    (integer))
-  (subgoal_combiner_declaration)
-  (init_section)
-  (kb_section
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list
-          (typed_variable
-            (local_variable))
-          (MISSING ")")))
-      (action_statement
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (kb_section
+      (rule
         (call_expression
           (identifier)
           (argument_list
             (typed_variable
-              (local_variable)))))))
-  (exit_section))
+              (local_variable))
+            (MISSING ")")))
+        (action_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (typed_variable
+                (local_variable)))))))
+    (exit_section)))
 
 ==================
 Incorrect section order recovery
@@ -530,25 +537,26 @@ ENDEXITSECTION
 ---
 
 (source_file
-  (version_declaration
-    (integer))
-  (subgoal_combiner_declaration)
-  (init_section)
-  (kb_section
-    (rule
-      (call_expression
-        (identifier)
-        (argument_list))
-      (ERROR
-        (identifier)
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (kb_section
+      (rule
         (call_expression
           (identifier)
-          (argument_list)))
-      (action_statement
-        (call_expression
+          (argument_list))
+        (ERROR
           (identifier)
-          (argument_list)))))
-  (exit_section))
+          (call_expression
+            (identifier)
+            (argument_list)))
+        (action_statement
+          (call_expression
+            (identifier)
+            (argument_list)))))
+    (exit_section)))
 
 ==================
 Unterminated string recovery
@@ -565,12 +573,85 @@ ENDEXITSECTION
 ---
 
 (source_file
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (ERROR
+      (identifier)
+      (string_content))
+    (kb_section)
+    (exit_section)))
+
+==================
+Reject mixed callable signature and goal roots
+==================
+
+Example([in] INTEGER _Value)
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(source_file
+  (ERROR
+    (identifier)
+    (signature_parameter
+      (parameter_direction)
+      (identifier)
+      (local_variable)))
+  (goal_file
+    (version_declaration
+      (integer))
+    (subgoal_combiner_declaration)
+    (init_section)
+    (kb_section)
+    (exit_section)))
+
+==================
+Reject truncated goal root
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+
+---
+
+(ERROR
   (version_declaration
     (integer))
   (subgoal_combiner_declaration)
   (init_section)
-  (ERROR
-    (identifier)
-    (string_content))
-  (kb_section)
-  (exit_section))
+  (kb_section))
+
+==================
+Reject truncated callable signature root
+==================
+
+Example([in] INTEGER
+
+---
+
+(ERROR
+  (identifier)
+  (parameter_direction)
+  (identifier))
+
+==================
+Reject malformed root
+==================
+
+Version 1
+
+---
+
+(ERROR
+  (version_declaration
+    (integer)))

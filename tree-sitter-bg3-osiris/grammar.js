@@ -33,19 +33,21 @@ export default grammar({
   word: ($) => $.identifier,
 
   rules: {
-    source_file: ($) => seq(
-      choice(
-        seq(
-          $.version_declaration,
-          $.subgoal_combiner_declaration,
-          $.init_section,
-          $.kb_section,
-          $.exit_section,
-          repeat($.parent_target_edge),
-        ),
-        $.callable_signature,
-      ),
+    source_file: ($) => choice(
+      $.goal_file,
+      $.callable_signature_file,
     ),
+
+    goal_file: ($) => seq(
+      $.version_declaration,
+      $.subgoal_combiner_declaration,
+      $.init_section,
+      $.kb_section,
+      $.exit_section,
+      repeat($.parent_target_edge),
+    ),
+
+    callable_signature_file: ($) => $.callable_signature,
 
     callable_signature: ($) => seq(
       field('name', $.identifier),
