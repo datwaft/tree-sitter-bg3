@@ -322,6 +322,97 @@ ENDEXITSECTION
   (identifier))
 
 ==================
+Reject empty THEN blocks
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+IF
+ExampleEvent()
+THEN
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(ERROR
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (call_expression
+    (identifier)
+    (argument_list))
+  (identifier)
+  (identifier))
+
+==================
+Reject empty THEN at EOF
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+IF
+ExampleEvent()
+THEN
+
+---
+
+(ERROR
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (call_expression
+    (identifier)
+    (argument_list)))
+
+==================
+Reject empty THEN before next rule
+==================
+
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+IF
+FirstEvent()
+THEN
+IF
+NextEvent()
+THEN
+RecordNext();
+EXITSECTION
+ENDEXITSECTION
+
+---
+
+(source_file
+  (version_declaration
+    (integer))
+  (subgoal_combiner_declaration)
+  (init_section)
+  (kb_section
+    (rule
+      (call_expression
+        (identifier)
+        (argument_list))
+      (ERROR
+        (identifier)
+        (call_expression
+          (identifier)
+          (argument_list)))
+      (action_statement
+        (call_expression
+          (identifier)
+          (argument_list)))))
+  (exit_section))
+
+==================
 Unterminated string recovery
 ==================
 
