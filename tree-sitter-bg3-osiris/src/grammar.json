@@ -4,50 +4,53 @@
   "word": "identifier",
   "rules": {
     "source_file": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "goal_file"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "callable_signature_file"
+        }
+      ]
+    },
+    "goal_file": {
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "version_declaration"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "subgoal_combiner_declaration"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "init_section"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "kb_section"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "exit_section"
-                },
-                {
-                  "type": "REPEAT",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "parent_target_edge"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "SYMBOL",
-              "name": "callable_signature"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "version_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "subgoal_combiner_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "init_section"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "kb_section"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "exit_section"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "parent_target_edge"
+          }
         }
       ]
+    },
+    "callable_signature_file": {
+      "type": "SYMBOL",
+      "name": "callable_signature"
     },
     "callable_signature": {
       "type": "SEQ",

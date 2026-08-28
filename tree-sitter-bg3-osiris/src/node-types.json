@@ -107,6 +107,21 @@
     }
   },
   {
+    "type": "callable_signature_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "callable_signature",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "comparison_expression",
     "named": true,
     "fields": {
@@ -235,6 +250,41 @@
     "type": "goal_completed_statement",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "goal_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "exit_section",
+          "named": true
+        },
+        {
+          "type": "init_section",
+          "named": true
+        },
+        {
+          "type": "kb_section",
+          "named": true
+        },
+        {
+          "type": "parent_target_edge",
+          "named": true
+        },
+        {
+          "type": "subgoal_combiner_declaration",
+          "named": true
+        },
+        {
+          "type": "version_declaration",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "init_section",
@@ -408,35 +458,15 @@
     "root": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "callable_signature",
+          "type": "callable_signature_file",
           "named": true
         },
         {
-          "type": "exit_section",
-          "named": true
-        },
-        {
-          "type": "init_section",
-          "named": true
-        },
-        {
-          "type": "kb_section",
-          "named": true
-        },
-        {
-          "type": "parent_target_edge",
-          "named": true
-        },
-        {
-          "type": "subgoal_combiner_declaration",
-          "named": true
-        },
-        {
-          "type": "version_declaration",
+          "type": "goal_file",
           "named": true
         }
       ]
