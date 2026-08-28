@@ -85,7 +85,7 @@ jobs:
             "Cargo.lock=$cargo_lock_version"
             "package.json=$(jq -er '.version' package.json)"
             "package-lock.json root=$(jq -er '.version' package-lock.json)"
-            "package-lock.json package=$(jq -er '.packages[\"\"].version' package-lock.json)"
+            "package-lock.json package=$(jq -er '.packages[""].version' package-lock.json)"
             "tree-sitter.json=$(jq -er '.metadata.version' tree-sitter.json)"
           )
           for item in "${versions[@]}"; do
