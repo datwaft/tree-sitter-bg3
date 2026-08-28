@@ -33,7 +33,8 @@ Version 0.6.0 parses standalone Osiris callable signatures, including `[in]`,
 `[out]`, and `[inout]` parameter directions, types, and local names.
 Version 0.7.0 rejects empty Osiris `THEN` blocks, parses dotted enum constants,
 and distinguishes complete Osiris goal files from standalone callable-signature
-sources.
+sources. Version 0.7.1 makes release validation fetch the annotated tag object
+explicitly before checking its type and commit.
 
 This repository contains four grammars:
 
