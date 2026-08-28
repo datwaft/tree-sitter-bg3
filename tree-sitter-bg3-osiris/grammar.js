@@ -210,7 +210,10 @@ export default grammar({
       $.guid_literal,
       $.real,
       $.integer,
+      $.enum_constant,
     ),
+
+    enum_constant: () => token(prec(1, /[A-Za-z][A-Za-z0-9_]*\.[A-Za-z][A-Za-z0-9_]*/)),
 
     string_literal: ($) => seq(
       optional('L'),

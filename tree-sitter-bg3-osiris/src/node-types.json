@@ -498,6 +498,10 @@
         "required": true,
         "types": [
           {
+            "type": "enum_constant",
+            "named": true
+          },
+          {
             "type": "guid_literal",
             "named": true
           },
@@ -695,6 +699,10 @@
     "type": "comment",
     "named": true,
     "extra": true
+  },
+  {
+    "type": "enum_constant",
+    "named": true
   },
   {
     "type": "guid_literal",

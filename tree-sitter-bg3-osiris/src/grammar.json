@@ -840,8 +840,23 @@
         {
           "type": "SYMBOL",
           "name": "integer"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "enum_constant"
         }
       ]
+    },
+    "enum_constant": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[A-Za-z][A-Za-z0-9_]*\\.[A-Za-z][A-Za-z0-9_]*"
+        }
+      }
     },
     "string_literal": {
       "type": "SEQ",
