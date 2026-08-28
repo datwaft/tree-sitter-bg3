@@ -37,6 +37,10 @@ jobs:
             exit 1
           fi
 
+          # actions/checkout can materialize the event tag as a lightweight
+          # local ref. Fetch the exact remote ref explicitly so validation
+          # observes the annotated tag object, not checkout's local shape.
+          git fetch --force --no-tags origin "refs/tags/$TAG:refs/tags/$TAG"
           tag_type="$(git cat-file -t "refs/tags/$TAG")"
           if [[ "$tag_type" != tag ]]; then
             echo "Release tags must be annotated tags: $TAG" >&2

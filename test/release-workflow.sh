@@ -28,6 +28,7 @@ for tag in v01.2.3 v1.02.3 v1.2.03 v1.2 v1.2.3.4 release-1.2.3; do
 done
 
 grep -Fq 'git cat-file -t "refs/tags/$TAG"' "$workflow"
+grep -Fq 'git fetch --force --no-tags origin "refs/tags/$TAG:refs/tags/$TAG"' "$workflow"
 grep -Fq 'if [[ "$tag_type" != tag ]]; then' "$workflow"
 grep -Fq 'git merge-base --is-ancestor "$tag_commit" origin/main' "$workflow"
 grep -Fq 'echo "tag_commit=$tag_commit" >> "$GITHUB_OUTPUT"' "$workflow"
